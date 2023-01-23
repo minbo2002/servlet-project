@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>folder</display-name>
+
+  <!-- 개발의 가장 마지막 단계에서 활성화시키기. (에러코드보고 원인을 찾기위해) 아래는 예시임.
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/error/error404.jsp</location>
+  </error-page>
+  -->
+  
+  <!-- 필터.  아래는 예시임.
+  <filter>
+  	<filter-name>LoginCheckFilter</filter-name>
+  	<filter-class>filter.LoginCheckFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+  	<filter-name>LoginCheckFilter</filter-name>
+  	<url-pattern>/changePwd.do</url-pattern>
+  	<url-pattern>/article/write.do</url-pattern>
+  	<url-pattern>/article/modify.do</url-pattern>
+  </filter-mapping>
+  -->	
+
+  <context-param>
+  	<param-name>poolConfig</param-name>
+  	<param-value>
+  		jdbcdriver=com.mysql.jdbc.Driver
+  		jdbcUrl=jdbc:mysql://127.0.0.1:3306/bookcommunity?useUnicode=true&amp;characterEncoding=utf8
+  		dbUser=minbo
+  		dbPass=minbo
+  		validationQuery=select 1
+  		minIdle=3
+  		maxTotal=30
+  		poolName=bookcommunity
+  	</param-value>
+  </context-param>
+
+  <servlet>
+  	<servlet-name>ControllerUsingURI</servlet-name>
+  	<servlet-class>mvc.controller.ControllerUsingURI</servlet-class>
+  	<init-param>
+  		<param-name>configFile</param-name>
+  		<param-value>/WEB-INF/commandHandlerURI.properties</param-value>
+  	</init-param>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ControllerUsingURI</servlet-name>
+  	<url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+</web-app>

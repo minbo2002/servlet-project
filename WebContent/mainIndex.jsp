@@ -1,33 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
+<c:set var="conPath" value="<%=request.getContextPath()%>"></c:set>     
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="description" content="member board Web Application">
-	<meta name="keywords" content="member, board, article, mvc">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title></title>
-
-	<!-- CDN 방식으로 jQuery 연동 
-	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script> -->
-	<!-- 최신버전 jQuery 연동 -->
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	
-	<style></style>
-	
-	<script>
-	    $(document).ready(function() {
-	    	alert("jquery 연결성공");
-	    });
-	</script>
-	 
+<meta charset="UTF-8">
+<title>index</title>
 </head>
 <body>
+	<h2>메인화면</h2>
 
-	<h2></h2>
-    <hr />
+	<hr>
+	
+	<%-- 이문서는 LoginHandler 컨트롤러에 의해서 아래와 같이 model을 받는다.
+		 class User
+		   int memberno;	    // 회원번호
+		   String memberid;     // id	
+		   String membername;   // 이름
+		   int grade;		    // 회원등급(기본1) =>  1(정상),2(강퇴),3(탈퇴),4(휴면),999(관리자)
+		 session.setAttribute("AUTHUSER", user); 
+	--%>
+	*model로 받은 AUTHUSER => ${AUTHUSER} <br/>
+	*sessionScope.AUTHUSER => ${sessionScope.AUTHUSER} <br/><br/><br/>
+	*세션id => <%=session.getId()%> <br/>
+	*세션의 최근 접근시간 => <%=session.getLastAccessedTime() %> <br/>
+	*session.getValue() => <%=session.getValue("AUTHUSER") %> <br/>
 
+	<%-- 비로그인시 보여지는 메뉴 --%>
+	<c:if test="${empty AUTHUSER}">
+		<ul>
+			<h4>글 목록</h4>
+			<li><a href="${conPath}/recomboard/listboard.do">추천게시판 목록</a></li>
+		</ul>
+	</c:if>
+
+	
 </body>
 </html>

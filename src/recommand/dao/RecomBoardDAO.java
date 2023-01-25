@@ -21,9 +21,9 @@ public class RecomBoardDAO {
 	
 	/*
 	   int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
-	   int size : 1페이지당 출력게시물 개수 
+	   int rowSize : 1페이지당 출력게시물 개수 
 	 */
-	public List<RecomBoard> select(Connection conn, int startRow, int size) throws SQLException {
+	public List<RecomBoard> select(Connection conn, int startRow, int rowSize) throws SQLException {
 		
 		String sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 				"FROM recomboard a, member b " + 
@@ -36,7 +36,7 @@ public class RecomBoardDAO {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, startRow);  // int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
-			pstmt.setInt(2, size);		// int size : 1페이지당 출력게시물 개수
+			pstmt.setInt(2, rowSize);	// int rowSize : 1페이지당 출력게시물 개수
 			
 			rs = pstmt.executeQuery();
 			System.out.println("rs = " + rs);
@@ -72,5 +72,25 @@ public class RecomBoardDAO {
 	// Timestamp -> Date 객체로 변환하기 (p648 47번째줄)
 	private Date toDate(Timestamp timestamp) {
 		return new Date(timestamp.getTime());
+	}
+	
+	public int selectCount(Connection conn) throws SQLException  {
+		
+		String sql = "select count(R_NO) " +
+					 "from recomboard";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {				
+				return rs.getInt(1);  // count란 컬럼이 없기때문에 조회해서 index 값을 준다. 
+			}
+			return 0;
+			
+		}finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
 	}
 }

@@ -61,12 +61,41 @@ public class BoardPage {
 	}
 	
 	//게시글없니? 게시글없으면 true리턴
-	public boolean hasNoArticles() {
+	public boolean hasNoBoards() {
 		return total == 0;
 	}
 
 	//게시글이 존재하니? 게시글 있으면 true
-	public boolean hasArticles() {
+	public boolean hasBoards() {
 		return total > 0;
 	}
+
+	// 전체게시물 조회
+	public int getTotal() {
+		return total;
+	}
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	// 게시글 목록정보
+	public List<RecomBoard> getListAll() {
+		return listAll;
+	}
+	public int getTotalPages() {
+		return totalPages;
+	}
+	public int getStartPage() {
+		return startPage;
+	}
+	public int getEndPage() {
+		return endPage;
+	}
+
+	@Override
+	public String toString() {
+		return "BoardPage [total=" + total + ", currentPage=" + currentPage + ", listAll=" + listAll + ", totalPages="
+				+ totalPages + ", startPage=" + startPage + ", endPage=" + endPage + "]";
+	}
+
 }

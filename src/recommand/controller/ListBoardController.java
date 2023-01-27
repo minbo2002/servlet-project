@@ -7,7 +7,7 @@ import mvc.command.CommandHandler;
 import recommand.model.BoardPage;
 import recommand.service.ListBoardService;
 
-public class RecomBoardController implements CommandHandler {
+public class ListBoardController implements CommandHandler {
 
 	private static final String FORM_VIEW = "/view/recomboard/listBoard.jsp";
 	private ListBoardService listBoardService = new ListBoardService();

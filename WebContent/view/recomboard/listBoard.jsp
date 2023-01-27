@@ -93,7 +93,7 @@
 	   		
 	   		<%-- paging 처리 --%>
 	   		<tr>
-	    		<td colspan="5" style="text-align: center;">
+	    		<td colspan="6" style="text-align: center;">
 	    			<%-- JSTL if조건문 : 이전출력 --%>
 	    			<c:if test="${boardPage.startPage > 5}">
 	    				<a href="/recomboard/listboard.do?pageNo=${boardPage.startPage-5}&rowSize=${rowSize}">prev</a>

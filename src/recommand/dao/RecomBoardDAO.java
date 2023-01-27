@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import jdbc.JdbcUtil;
-import member.domain.Member;
+import member.model.Member;
 import recommand.domain.RecomBoard;
 
 public class RecomBoardDAO {
@@ -23,12 +23,12 @@ public class RecomBoardDAO {
 	   int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
 	   int rowSize : 1페이지당 출력게시물 개수 
 	 */
-	public List<RecomBoard> select(Connection conn, int startRow, int rowSize) throws SQLException {
+	public List<RecomBoard> selectAll(Connection conn, int startRow, int rowSize) throws SQLException {
 		
 		String sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
-				"FROM recomboard a, member b " + 
-				"WHERE a.M_NO=b.M_NO " + 
-				"order BY a.R_NO desc LIMIT ?,?";
+					 "FROM recomboard a, member b " + 
+					 "WHERE a.M_NO=b.M_NO " + 
+					 "order BY a.R_NO desc LIMIT ?,?";
 		
 		List<RecomBoard> boardList = new ArrayList<RecomBoard>();
 		
@@ -54,7 +54,59 @@ public class RecomBoardDAO {
 		}
 	}
 	
-	// RecomBoard 객체로 변환하기 p647 36번째줄
+	// 글쓰기
+	// 매개변수 WriteRequest : Writer(로그인한 유저id, 로그인한 유저명), 입력제목, 입력내용
+	public RecomBoard insert(Connection conn, RecomBoard recomBoard) throws SQLException {
+
+		String sql = "INSERT INTO recomboard (book_title, author, publisher, r_title, r_content, LIKE_it, r_cnt, regdate, moddate, m_no) " + 
+					 "VALUES (?, ?, ?, ?, ?, 0, 0, ?, ?, ?);";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, recomBoard.getBookTitle());
+			pstmt.setString(2, recomBoard.getAuthor());
+			pstmt.setString(3, recomBoard.getPublisher());
+			pstmt.setString(4, recomBoard.getrTitle());
+			pstmt.setString(5, recomBoard.getrContent());
+			pstmt.setTimestamp(6, toTimestamp(recomBoard.getRegDate()));
+			pstmt.setTimestamp(7, toTimestamp(recomBoard.getModDate())); 
+			pstmt.setInt(8, recomBoard.getmNo()); 
+			
+			int cnt = pstmt.executeUpdate();
+			System.out.println("insert결과 행 개수 ="+cnt);
+			
+			if(cnt>0) {  // 입력이 되었다면
+				stmt = conn.createStatement();
+				rs = stmt.executeQuery("select last_insert_id() from recomboard");  //  last_insert_id() 함수 : 테이블의 마지막 auto_increment 값을 반환.
+																					//                        여기에서는  recomboard 테이블의 PK인 rNo 반환.
+				if(rs.next()) {
+					
+					int newNum = rs.getInt(1);    // getInt(1) : 컬럼의 1번째 값을 int형으로 반환
+					return new RecomBoard( newNum,   // newNum : 마지막으로 insert된 rNo
+										   recomBoard.getBookTitle(),
+										   recomBoard.getAuthor(),
+										   recomBoard.getPublisher(),
+										   recomBoard.getrTitle(), 
+										   recomBoard.getrContent(), 
+										   recomBoard.getLikeIt(), 
+										   recomBoard.getrCnt(), 
+										   recomBoard.getRegDate(),
+										   recomBoard.getModDate(),
+										   recomBoard.getmNo()
+										 );
+				}
+			}
+			
+			return recomBoard;
+ 
+		}finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(stmt);
+			JdbcUtil.close(pstmt);
+		}
+	}
+	
+	// RecomBoard 객체로 변환
 	private RecomBoard convertBoard(ResultSet rs) throws SQLException {
 		
 		return new RecomBoard(rs.getInt("R_NO"), 
@@ -63,15 +115,16 @@ public class RecomBoardDAO {
 							  rs.getString("R_CONTENT"),
 							  rs.getInt("LIKE_IT"),
 							  rs.getInt("R_CNT"),
-							  toDate(rs.getTimestamp("REGDATE")), 
-							  toDate(rs.getTimestamp("MODDATE")),
+							  toTimestamp(rs.getTimestamp("REGDATE")), 
+							  toTimestamp(rs.getTimestamp("MODDATE")),
 							  rs.getInt("M_NO"));
 
 	}
 	
-	// Timestamp -> Date 객체로 변환하기 (p648 47번째줄)
-	private Date toDate(Timestamp timestamp) {
-		return new Date(timestamp.getTime());
+	// 자바 필드의 Date타입을 DB의 Timestamp 타입으로 변환
+	private Timestamp toTimestamp(Date date) {
+		
+		return new Timestamp(date.getTime());
 	}
 	
 	public int selectCount(Connection conn) throws SQLException  {

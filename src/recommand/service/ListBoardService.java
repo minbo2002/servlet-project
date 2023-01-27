@@ -21,7 +21,7 @@ public class ListBoardService {
 			Connection conn = ConnectionProvider.getConnection();
 			
 			int total = recomBoardDAO.selectCount(conn);
-			List<RecomBoard> boardList = recomBoardDAO.select(conn, (pageNo-1)*rowSize, rowSize);
+			List<RecomBoard> boardList = recomBoardDAO.selectAll(conn, (pageNo-1)*rowSize, rowSize);
 			
 			return new BoardPage(total, pageNo, rowSize, boardList);
 			

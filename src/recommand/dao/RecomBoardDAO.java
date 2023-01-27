@@ -11,7 +11,10 @@ import java.util.Date;
 import java.util.List;
 import jdbc.JdbcUtil;
 import member.model.Member;
+import member.model.User;
 import recommand.domain.RecomBoard;
+import recommand.domain.RecomFile;
+import recommand.model.BoardData;
 
 public class RecomBoardDAO {
 
@@ -106,6 +109,52 @@ public class RecomBoardDAO {
 		}
 	}
 	
+	public RecomBoard selectById(Connection conn, int no) throws SQLException {
+		
+		System.out.println("RecomBoardDAO 클래스의  selectById() 메서드 진입v no="+no);
+		
+		String sql = "SELECT a.R_NO, b.MID, b.MNAME, a.BOOK_TITLE, a.AUTHOR, a.PUBLISHER, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, " +
+					 "a.REGDATE, a.MODDATE, a.M_NO " + 
+					 "FROM recomboard a, member b " + 
+					 "WHERE a.M_NO=b.M_NO AND a.R_NO=?";
+		
+//		String sql = "SELECT R_NO, BOOK_TITLE, AUTHOR, PUBLISHER, R_TITLE, R_CONTENT, LIKE_IT, R_CNT, REGDATE, MODDATE, M_NO " + 
+//					 "FROM recomboard " + 
+//					 "WHERE R_NO=?";
+		
+		RecomBoard recomBoard = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				recomBoard = new RecomBoard(
+											rs.getInt("a.R_NO"),
+											new Member(rs.getString("b.MID"), rs.getString("b.MNAME")),
+											rs.getString("a.BOOK_TITLE"), 
+											rs.getString("a.AUTHOR"), 
+											rs.getString("a.PUBLISHER"), 
+										    rs.getString("a.R_TITLE"), 
+										    rs.getString("a.R_CONTENT"), 
+										    rs.getInt("a.LIKE_IT"), 
+										    rs.getInt("a.R_CNT"), 
+										    toDate(rs.getTimestamp("a.REGDATE")), 
+										    toDate(rs.getTimestamp("a.MODDATE")), 
+										    rs.getInt("a.M_NO")
+									 	   );
+				System.out.println("DAO에서 생성된 recomBoard 객체 = " + recomBoard);
+			}
+			return recomBoard;
+			
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+	}
+	
 	// RecomBoard 객체로 변환
 	private RecomBoard convertBoard(ResultSet rs) throws SQLException {
 		
@@ -115,16 +164,10 @@ public class RecomBoardDAO {
 							  rs.getString("R_CONTENT"),
 							  rs.getInt("LIKE_IT"),
 							  rs.getInt("R_CNT"),
-							  toTimestamp(rs.getTimestamp("REGDATE")), 
-							  toTimestamp(rs.getTimestamp("MODDATE")),
+							  toDate(rs.getTimestamp("REGDATE")), 
+							  toDate(rs.getTimestamp("MODDATE")),
 							  rs.getInt("M_NO"));
 
-	}
-	
-	// 자바 필드의 Date타입을 DB의 Timestamp 타입으로 변환
-	private Timestamp toTimestamp(Date date) {
-		
-		return new Timestamp(date.getTime());
 	}
 	
 	public int selectCount(Connection conn) throws SQLException  {
@@ -144,6 +187,35 @@ public class RecomBoardDAO {
 		}finally {
 			JdbcUtil.close(rs);
 			JdbcUtil.close(pstmt);
+		}
+	}
+	
+	// 자바 필드의 Date타입을 DB의 Timestamp 타입으로 변환
+	private Timestamp toTimestamp(Date date) {
+		
+		return new Timestamp(date.getTime());
+	}
+	
+	// Timestamp -> Date 객체로 변환하기 (p648 47번째줄)
+	private Date toDate(Timestamp timestamp) {
+		return new Date(timestamp.getTime());
+	}
+	
+	// 조회수 증가
+	public void increaseReadCount(Connection conn, int no) throws SQLException {
+		
+		String sql = "update recomboard " + 
+					 "SET r_cnt=r_cnt+1 " + 
+					 "where r_no=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			int cnt = pstmt.executeUpdate();
+			System.out.println("증가한 조회수 row = " + cnt);
+			
+		} finally {
+			JdbcUtil.close(pstmt);			
 		}
 	}
 }

@@ -109,15 +109,18 @@ public class WriteBoardController implements CommandHandler {
 		}
 		
 		// 2. 비지니스 로직 수행 <-> Serivce <-> DAO <-> DB
-		int newBoardNo = writeBoardService.write(writeReq);  // Integer타입 -> int타입  변환 (unboxing)
+		int newBoardNo = writeBoardService.writeBoard(writeReq);  // Integer타입 -> int타입  변환 (unboxing)
 		
 		// 3. Model
 		request.setAttribute("newBoardNo", newBoardNo);  // newArticleNo : 새로 생성된 article_no (PK)
 		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("rowSize", rowSize);
+		request.setAttribute("uploadPath", uploadPath);  // 파일 저장위치
 		
 		// 4. View
-		return "/view/recomboard/listBoard.jsp";
+		response.sendRedirect(request.getContextPath()+"/recomboard/listboard.do");
+		
+		return null;
 	}
 	
 	private WriteRequest createWriteRequest(User authUser, MultipartRequest multipartRequest) {

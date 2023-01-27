@@ -2,8 +2,8 @@ package recommand.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import jdbc.JdbcUtil;
 import member.model.User;
 import recommand.domain.RecomBoard;
@@ -12,6 +12,7 @@ import recommand.domain.RecomFile;
 public class FileDAO {
 
 	PreparedStatement pstmt = null;
+	ResultSet rs = null;
 	
 	public RecomFile insert(Connection conn, RecomFile recomFile, RecomBoard savedRecomBoard) throws SQLException {
 		
@@ -33,6 +34,36 @@ public class FileDAO {
 		} finally {
 			JdbcUtil.close(pstmt);
 		}
+	}
+	
+	public RecomFile selectById(Connection conn, int no) throws SQLException {
+		
+		String sql = "SELECT R_FILE_NO, FILE_NAME, FILE_REAL_NAME, M_NO, R_NO " + 
+					 "FROM recomfile " + 
+					 "WHERE R_NO=?";
+		
+		RecomFile recomFile = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				recomFile = new RecomFile(
+										   rs.getInt("R_FILE_NO"), 
+										   rs.getString("FILE_NAME"), 
+										   rs.getString("FILE_REAL_NAME"), 
+										   rs.getInt("M_NO"), 
+										   rs.getInt("R_NO")
+										 );
 
+			}
+			return recomFile;
+			
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
 	}
 }

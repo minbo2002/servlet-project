@@ -7,7 +7,7 @@ import member.model.User;
 
 public class RecomBoard {
 
-	private int rNo;		 // 책추천 번호
+	private int rNo;		 // 추천게시판 번호
 	private Member member;   // 회원
 	private String bookTitle;	// 책제목
 	private String author;		// 저자
@@ -20,7 +20,7 @@ public class RecomBoard {
 	private Date modDate; 	 // 수정일자
 	private int mNo;		 // 회원번호(FK)	
 
-
+	// 상세보기를 위한 생성자
 	public RecomBoard(int rNo, Member member, String bookTitle, String author, String publisher, String rTitle,
 			String rContent, int likeIt, int rCnt, Date regDate, Date modDate, int mNo) {
 		this.rNo = rNo;

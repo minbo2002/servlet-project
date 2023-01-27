@@ -19,7 +19,7 @@ public class WriteBoardService {
 	
 	Connection conn = null;
 	
-	public Integer write(WriteRequest writeReq) {  //  WriteRequest writeReq ==> 로그인한 유저id, 유저name, 책제목, 저자, 출판사, 게시판 title, content, like, cnt, date, date
+	public Integer writeBoard(WriteRequest writeReq) {  //  WriteRequest writeReq ==> 로그인한 유저id, 유저name, 책제목, 저자, 출판사, 게시판 title, content, like, cnt, date, date
 		
 		try {
 			conn = ConnectionProvider.getConnection();

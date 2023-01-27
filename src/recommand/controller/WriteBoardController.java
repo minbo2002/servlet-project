@@ -73,8 +73,24 @@ public class WriteBoardController implements CommandHandler {
 		String encoding = "UTF-8";
 		
 		MultipartRequest multipartRequest = new MultipartRequest(request, uploadPath, maxSize, encoding, new DefaultFileRenamePolicy());
+
+		// (보고싶은 페이지)
+		String strPageNo = multipartRequest.getParameter("pageNo");    // "pageNo" : 보고싶은 페이지
+		int pageNo = 1;	 // int pageNo : 보고싶은 페이지 	 
+		if(strPageNo!=null) {
+			pageNo = Integer.parseInt(strPageNo);
+		}
 		
-		String rowSize = multipartRequest.getParameter("rowSize");
+		// (한페이지당 보여줄 게시물 개수)
+		String strRowSize = multipartRequest.getParameter("rowSize");  // "rowSize" : 한페이지당 보여줄 게시물 개수
+		int rowSize = 1;
+		if(strRowSize==null) {
+			rowSize = 3;
+		}else {
+			rowSize = Integer.parseInt(strRowSize);;
+		}
+		
+		BoardPage boardPage = listBoardService.getBoardPage(pageNo, rowSize);
 
 		//유효성검사를 위한 errors 객체 생성
 		Map<String, Boolean> errors = new HashMap<String, Boolean>();
@@ -97,11 +113,10 @@ public class WriteBoardController implements CommandHandler {
 		
 		// 3. Model
 		request.setAttribute("newBoardNo", newBoardNo);  // newArticleNo : 새로 생성된 article_no (PK)
+		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("rowSize", rowSize);
 		
 		// 4. View
-		// return "/view/article/newArticleSuccess.jsp";
-		// response.sendRedirect(request.getContextPath()+"/view/recomboard/listBoard.jsp");
 		return "/view/recomboard/listBoard.jsp";
 	}
 	

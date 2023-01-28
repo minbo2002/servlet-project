@@ -14,7 +14,7 @@
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	
 	<style>
-	
+
 	</style>
 	
 	<script>
@@ -26,19 +26,22 @@
 	<%-- ReadBoardController에서 아래와 같은 Model을 받는다
 		 
 		request.setAttribute("boardData", boardData);
+		request.setAttribute("no", no);
 		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("rowSize", rowSize);
 	--%>
 	*내용 : ${boardData} <br/><br/>
-	*요청페이지 : ${pageNo}  <br/><br/>
-	*1페이지당 글갯수 : ${rowSize}  <br/><br/>
-	*세션 : ${authUser} <br/><br/>
+	*세션 : ${authUser} <br/>
+	*글번호no : ${no} <br/>
+	*보고싶은 페이지 pageNo : ${pageNo} <br/>
+	*페이지당 글개수 rowSize : ${rowSize} <br/>
+
 
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 
-	<h2>readArticle.jsp</h2>
+	<h2>readBoard.jsp</h2>
     <hr/>
-    <table border="1" style="height:200px; width: 600px; margin: auto;">
+    <table border="1" style="margin: auto;">
     	<tr>
     		<th>작성자 아이디</th>
     		<td>${boardData.recomBoard.member.mId}</td>
@@ -49,7 +52,7 @@
     	</tr>
     	<tr>
     		<th>책제목</th>
-    		<td>${boardData.recomBoard.rContent}</td>
+    		<td>${boardData.recomBoard.bookTitle}</td>
     	</tr>
     	<tr>
     		<th>저자</th>
@@ -61,11 +64,15 @@
     	</tr>
     	<tr>
     		<th>책 이미지</th>
-    		<td><img src="../uploadImage/${boardData.recomFile.fileRealName}"></td>
+    		<td align="center" valign="middle">
+    			<img src="../uploadImage/${boardData.recomFile.fileRealName}" style="height:300px; width:600px;">
+    		</td>
     	</tr>
     	<tr>
     		<th>게시판 내용</th>
-    		<td>${boardData.recomBoard.rContent}</td>
+    		<td>
+    			<textarea style="width: 600px" readonly="readonly">${boardData.recomBoard.rContent}</textarea>
+    		</td>
     	</tr>
     	<tr>
     		<th>좋아요</th>
@@ -77,21 +84,20 @@
     	</tr>
     	<tr>
     		<th>작성일</th>
-    		<td><fmt:formatDate pattern="yyyy년 MM월 dd일" value="${boardData.recomBoard.regDate}"/></td>
+    		<td><fmt:formatDate pattern="yyyy년 MM월 dd일 HH시:mm분:ss초" value="${boardData.recomBoard.regDate}"/></td>
     	</tr>
     	<tr>
     		<th>수정일</th>
-    		<td><fmt:formatDate pattern="yyyy년 MM월 dd일" value="${boardData.recomBoard.modDate}"/></td>
+    		<td><fmt:formatDate pattern="yyyy년 MM월 dd일 HH시:mm분:ss초" value="${boardData.recomBoard.modDate}"/></td>
     	</tr>
     	<tr>
     		<td colspan="2" style="text-align: center;">	
-   			<c:set var="pgNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>	  <!-- parameter인 pageNo가 비어있다면 pageNo=1  pageNo이 비어있지않다면 해당 pageNo값을 가져간다  -->
-  				<a href="/article/listArticle.do?pageNo=${pgNo}&rowSize=${rowSize}">목록보기</a>
+   			<c:set var="pageNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>	  <!-- parameter인 pageNo가 비어있다면 pageNo=1  pageNo이 비어있지않다면 해당 pageNo값을 가져간다  -->
+  				<a href="/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}">목록보기</a>
    			
-   			<c:if test="${AUTHUSER.memberid==articleData.article.writer.writer_id}">
-    			<a href="/article/modify.do?no=${articleData.article.number}&pageNo=${pgNo}&rowSize=${rowSize}">글 수정</a>
-    			<a href="/article/deleteArticle.do?no=${articleData.article.number}">글 삭제(delete용)</a>
-    			<a href="/article/deleteArticle2.do?no=${articleData.article.number}">글 삭제(update용)</a>    			
+   			<c:if test="${authUser.mId==boardData.recomBoard.member.mId}">
+    			<a href="/recomboard/update.do?no=${boardData.recomBoard.rNo}&pageNo=${pageNo}&rowSize=${rowSize}">글 수정</a>
+    			<a href="/recomboard/delete.do?no=${boardData.recomBoard.rNo}">글 삭제(delete용)</a>  			
    			</c:if>   		
     		</td>
     	</tr>

@@ -11,10 +11,8 @@ import java.util.Date;
 import java.util.List;
 import jdbc.JdbcUtil;
 import member.model.Member;
-import member.model.User;
 import recommand.domain.RecomBoard;
-import recommand.domain.RecomFile;
-import recommand.model.BoardData;
+
 
 public class RecomBoardDAO {
 
@@ -151,6 +149,34 @@ public class RecomBoardDAO {
 			
 		} finally {
 			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+	}
+	
+	public void update(Connection conn, int rNo, int mNo, String bookTitle, String author, String publisher, 
+			String rTitle, String rContent) throws SQLException {
+		
+		System.out.println("RecomBoardDAO 클래스의 update() 메서드 진입");
+		System.out.println("RecomBoard DAO의 데이터 rNo="+rNo+", mNo="+mNo+", bookTitle="+bookTitle+", author="+author+
+				", publisher="+publisher+", rTitle="+rTitle+", rContent="+rContent);
+		
+		String sql = "update recomboard " + 
+					 "set book_title=?, author?, publisher=?, r_title=?, r_content=?, moddate=now() " + 
+					 "where r_no=? AND m_no=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bookTitle);
+			pstmt.setString(2, author);
+			pstmt.setString(3, publisher);
+			pstmt.setString(4, rTitle);
+			pstmt.setString(5, rContent);
+			pstmt.setInt(6, rNo);
+			pstmt.setInt(7, mNo);
+			int cnt = pstmt.executeUpdate();
+			System.out.println("update된 게시판 행개수 = " + cnt);
+			
+		} finally {
 			JdbcUtil.close(pstmt);
 		}
 	}

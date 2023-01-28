@@ -57,6 +57,7 @@ public class ReadBoardController implements CommandHandler {
 		
 		// 3. Model
 		request.setAttribute("boardData", boardData);
+		request.setAttribute("no", no);
 		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("rowSize", rowSize);
 		

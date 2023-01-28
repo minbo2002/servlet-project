@@ -27,7 +27,7 @@ public class WriteBoardService {
 			
 			Date now = new Date();
 			
-			// 게시판등록
+			// 입력한 게시판 데이터 가져오기
 			RecomBoard recomBoard = new RecomBoard( 
 													writeReq.getBookTitle(),
 													writeReq.getAuthor(),
@@ -44,7 +44,7 @@ public class WriteBoardService {
 				throw new RuntimeException("추천게시판 등록 실패");
 			}
 			
-			// 이미지등록
+			// 입력한 파일 데이터 가져오기
 			RecomFile recomFile = new RecomFile( 
 												 writeReq.getRecomfile().getFilename(), 
 												 writeReq.getRecomfile().getFileRealName(), 

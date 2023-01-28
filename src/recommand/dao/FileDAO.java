@@ -66,4 +66,24 @@ public class FileDAO {
 			JdbcUtil.close(pstmt);
 		}
 	}
+	
+	public void update(Connection conn, String filename, String fileRealName, int mNo, int rNo) throws SQLException {
+				
+		String sql = "INSERT INTO recomfile(file_name, file_real_name, m_no, r_no) " + 
+				 	 "VALUES(?, ?, ?, ?)";
+	
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, filename);
+			pstmt.setString(2, fileRealName);
+			pstmt.setInt(3, mNo);
+			pstmt.setInt(4, rNo);
+			
+			int cnt = pstmt.executeUpdate();
+			System.out.println("생성된 파일테이블 행 개수 = " + cnt);
+
+		} finally {
+			JdbcUtil.close(pstmt);
+		}
+	}
 }

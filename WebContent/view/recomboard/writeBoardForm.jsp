@@ -49,11 +49,11 @@
 		 
 		 -->  request.setAttribute("errors", errors);		 
 	--%>
-	
-	 authUser ==>  ${authUser}	 	  <br/><br/>	
-	 rowSize  ==>  ${rowSize}	 	  <br/><br/>
-	 errors   ==>  ${errors}     	  <br/><br/>
-	newBoardNo ==> ${newBoardNo}  <br/><br/>
+	*세션 : ${authUser} <br/>
+	*보고싶은 페이지 pageNo : ${pageNo} <br/>
+	*페이지당 글개수 rowSize : ${rowSize} <br/>
+	*errors : ${errors}     	  <br/>
+	*newBoardNo : ${newBoardNo}  <br/>>
 
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 

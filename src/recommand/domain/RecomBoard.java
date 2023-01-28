@@ -7,7 +7,7 @@ import member.model.User;
 
 public class RecomBoard {
 
-	private int rNo;		 // 추천게시판 번호
+	private int rNo;		 // 추천게시판 번호(PK)
 	private Member member;   // 회원
 	private String bookTitle;	// 책제목
 	private String author;		// 저자

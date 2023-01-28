@@ -2,11 +2,11 @@ package recommand.domain;
 
 public class RecomFile {
 
-	private int rFileNo;	      // 파일번호	
-	private String filename;	  // 사용자가 올린 파일의 이름
-	private String fileRealName;  //  서버에 저장된 파일이름
-	private int m_no;	// 회원 PK를 FK로 사용
-	private int r_no;	// 추천게시판 PK를 FK로 사용
+	private int rFileNo;	      // 파일번호(PK)
+	private String filename;	  // 사용자가 지정한 파일이름
+	private String fileRealName;  // DB에 저장되는 파일이름(사용자가 지정한 파일이름이 중복될경우 뒤에 숫자붙음)
+	private int m_no;	// 회원번호(FK)
+	private int r_no;	// 추천게시판 번호(FK)
 	
 	public RecomFile(int rFileNo, String filename, String fileRealName, int m_no, int r_no) {
 		this.rFileNo = rFileNo;

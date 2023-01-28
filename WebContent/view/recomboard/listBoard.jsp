@@ -11,9 +11,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>게시판 목록</title>
 
-	<!-- CDN 방식으로 jQuery 연동 
-	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script> -->
-	<!-- 최신버전 jQuery 연동 -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	
 	<style></style>
@@ -34,6 +31,9 @@
 		 request.setAttribute("boardPage", boardPage); 
 		 request.setAttribute("rowSize", rowSize);
 	--%>
+	*세션 : ${authUser} <br/>
+	*pageNo : ${pageNo} <br/>
+	*rowSize : ${rowSize} <br/>
 	
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 	<h2>추천게시판 목록페이지</h2>
@@ -50,16 +50,18 @@
     </form>
     </p>
     
+    <c:if test="${not empty authUser}">
     <p> 
    		<a href="/recomboard/write.do?rowSize=${rowSize}">글쓰기</a>
 	</p>
+	</c:if>
     
     <table border="1" style="width: 600px;">
     	<thead>
     		<tr>
     			<th>번호</th>
     			<th>제목</th>
-    			<th>작성자</th>
+    			<th>작성자 아이디</th>
     			<th>작성일</th>
     			<th>조회수</th>
     			<th>좋아요</th>
@@ -79,7 +81,7 @@
 	    	<tr> 
 	   			<td>${item.rNo}</td>
 	   			<td><a href="/recomboard/read.do?no=${item.rNo}&pageNo=${boardPage.currentPage}&rowSize=${rowSize}">${item.rTitle}</a></td>
-	   			<td>${item.member.mName}</td>
+	   			<td>${item.member.mId}</td>
 	   			<td>
 			        <fmt:formatDate pattern="yyyy.MM.dd. HH:mm:ss" value="${item.regDate}" />
 	   			</td>

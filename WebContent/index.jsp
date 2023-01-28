@@ -34,7 +34,6 @@
 		<ul>
 			<h4>관리자 전용</h4>
 			<li><a href="${conPath}/logout.do">로그아웃</a></li>
-			<li><a href="${conPath}/changePwd.do">비밀번호변경</a></li>
 			<li><a href="${conPath}/article/write.do">글쓰기</a></li>  <br/><br/>
 			<h4>회원 관리</h4>
 			<li><a href="${conPath}/admin/getMemberInfo.do">myPage</a></li>   <br/><br/>
@@ -51,9 +50,7 @@
 		${AUTHUSER.membername}님 접속중
 		<ul>
 			<h4>일반회원 전용</h4>
-			<li><a href="${conPath}/logout.do">로그아웃</a></li>
-			<li><a href="${conPath}/changePwd.do">비밀번호변경</a></li>
-			<li><a href="${conPath}/article/write.do">글쓰기</a></li>    
+			<li><a href="${conPath}/logout.do">로그아웃</a></li>  
 		</ul>
 		<ul>
 			<h4>글 목록</h4>
@@ -66,7 +63,6 @@
 		<ul>
 			<h4>비회원 전용</h4>
 			<li><a href="${conPath}/login.do">로그인</a></li>
-			<li><a href="${conPath}/logout.do">로그아웃</a></li>
 			<li><a href="${conPath}/findId.do">아이디 찾기</a></li>
 			<li><a href="${conPath}/findPwd.do">비밀번호 찾기</a></li>
 		</ul>

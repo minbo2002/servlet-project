@@ -18,6 +18,11 @@ public class User {
 		this.grade = grade;
 		this.gender = gender;
 	}
+	
+	public User(int m_no, String mId) {
+		this.m_no = m_no;
+		this.mId = mId;
+	}
 
 	//메서드
 	public int getM_no() {

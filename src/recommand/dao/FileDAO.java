@@ -86,4 +86,29 @@ public class FileDAO {
 			JdbcUtil.close(pstmt);
 		}
 	}
+	
+	public int delete(Connection conn, int no) {
+		
+		String sql = "DELETE from recomfile " + 
+					 "WHERE r_no=?";
+		
+		int cnt = 0;  // 삭제한 파일 행 개수
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			cnt = pstmt.executeUpdate();
+			System.out.println("삭제된 파일 행 개수="+cnt);
+			
+			return cnt;
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		
+		}finally {
+			JdbcUtil.close(pstmt);
+		}
+		
+		return cnt;
+	}
 }

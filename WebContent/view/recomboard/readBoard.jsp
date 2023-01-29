@@ -18,7 +18,25 @@
 	</style>
 	
 	<script>
+	$(function() {
+		
+		$("#btnList").click(function(no) {
 
+			location.href="/recomboard/listboard.do?pageNo="+${pageNo}+"&rowSize="+${rowSize}
+
+		});
+		
+		$("#btnDelete").click(function(no) {
+			
+			no = ${boardData.recomBoard.rNo};
+			
+			if(confirm("삭제하시겠습니까?")) {
+				location.href = "/recomboard/delete.do?no="+no;
+			}
+		});
+		
+		
+	});
 	</script>
 	 
 </head>
@@ -93,11 +111,12 @@
     	<tr>
     		<td colspan="2" style="text-align: center;">	
    			<c:set var="pageNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>	  <!-- parameter인 pageNo가 비어있다면 pageNo=1  pageNo이 비어있지않다면 해당 pageNo값을 가져간다  -->
-  				<a href="/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}">목록보기</a>
-   			
+  				<!-- <a href="/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}">목록보기</a> -->
+   				<input type="button" value="목록 이동" id="btnList">
+   				
    			<c:if test="${authUser.mId==boardData.recomBoard.member.mId}">
-    			<a href="/recomboard/update.do?no=${boardData.recomBoard.rNo}&pageNo=${pageNo}&rowSize=${rowSize}">글 수정</a>
-    			<a href="/recomboard/delete.do?no=${boardData.recomBoard.rNo}">글 삭제(delete용)</a>  			
+   				<input type="button" value="삭제하기" id="btnDelete">
+    			<a href="/recomboard/update.do?no=${boardData.recomBoard.rNo}&pageNo=${pageNo}&rowSize=${rowSize}">글 수정</a>		
    			</c:if>   		
     		</td>
     	</tr>

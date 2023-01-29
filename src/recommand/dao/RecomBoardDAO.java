@@ -181,6 +181,31 @@ public class RecomBoardDAO {
 		}
 	}
 	
+	public int delete(Connection conn, int no) {
+		
+		String sql = "DELETE from recomboard " + 
+					 "WHERE r_no=?";
+		
+		int cnt = 0;  // 삭제(update용)된 행 갯수를 저장할 변수
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			cnt = pstmt.executeUpdate();
+			System.out.println("삭제된 게시판 행 개수="+cnt);
+			
+			return cnt;
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			
+		}finally {
+			JdbcUtil.close(pstmt);
+		}
+		
+		return cnt;
+	}
+	
 	// RecomBoard 객체로 변환
 	private RecomBoard convertBoard(ResultSet rs) throws SQLException {
 		

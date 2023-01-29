@@ -25,7 +25,6 @@ public class ReadBoardController implements CommandHandler {
 		}
 		int no = Integer.parseInt(strNo);
 
-		/*===============================================================================================*/
 		
 		// pageNo : 요청 페이지
 		String strPageNo = request.getParameter("pageNo");    // "pageNo" : listArtricle.jsp 파일에서 보고싶은 페이지
@@ -35,8 +34,6 @@ public class ReadBoardController implements CommandHandler {
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
-		/*===============================================================================================*/
-		
 		// rowSize : 한페이지에 보여줄 글 갯수
 		String strRowSize = request.getParameter("rowSize");  // "rowSize" : listArtricle.jsp 파일에서  <select> 태그의 name 속성값
 		
@@ -45,14 +42,7 @@ public class ReadBoardController implements CommandHandler {
 			rowSize = Integer.parseInt(strRowSize);;
 		}
 		
-		/*===============================================================================================*/
-		
 		// 2. 비지니스 로직  Service <-> DAO <-> DB
-		/*
-		        파라미터
-		    int no : 상세조회 할 게시판번호
-		 */
-		
 		BoardData boardData = readBoardService.readBoard(no, true);
 		
 		// 3. Model

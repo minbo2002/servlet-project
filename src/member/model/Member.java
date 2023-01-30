@@ -37,6 +37,12 @@ public class Member {
 		this.grade = grade;
 	}
 	
+	public Member(int m_no, String mId, String mName) {
+		this.m_no = m_no;
+		this.mId = mId;
+		this.mName = mName;
+	}
+	
 	public Member(String mId, String mName) {
 		this.mId = mId;
 		this.mName = mName;

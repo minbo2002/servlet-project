@@ -14,7 +14,8 @@ public class ListBoardController implements CommandHandler {
 	
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-				
+
+		
 		// (보고싶은 페이지)
 		String strPageNo = request.getParameter("pageNo");    // "pageNo" : 보고싶은 페이지
 		int pageNo = 1;	 // int pageNo : 보고싶은 페이지 	 
@@ -34,6 +35,7 @@ public class ListBoardController implements CommandHandler {
 		BoardPage boardPage = listBoardService.getBoardPage(pageNo, rowSize);
 		
 		request.setAttribute("boardPage", boardPage);
+		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("rowSize", rowSize);
 		
 		return FORM_VIEW;

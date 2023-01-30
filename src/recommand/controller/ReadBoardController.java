@@ -37,7 +37,7 @@ public class ReadBoardController implements CommandHandler {
 		// rowSize : 한페이지에 보여줄 글 갯수
 		String strRowSize = request.getParameter("rowSize");  // "rowSize" : listArtricle.jsp 파일에서  <select> 태그의 name 속성값
 		
-		int rowSize = 3;    // 만약 파라미터 size(한페이지에 보여줄 글 갯수)가 null이라면 한페이지에 보여줄 글 갯수를 3으로 설정
+		int rowSize = 10;    // 만약 파라미터 size(한페이지에 보여줄 글 갯수)가 null이라면 한페이지에 보여줄 글 갯수를 3으로 설정
 		if(strRowSize!=null) {
 			rowSize = Integer.parseInt(strRowSize);;
 		}

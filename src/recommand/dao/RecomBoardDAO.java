@@ -111,7 +111,7 @@ public class RecomBoardDAO {
 		
 		System.out.println("RecomBoardDAO 클래스의  selectById() 메서드 진입v no="+no);
 		
-		String sql = "SELECT a.R_NO, b.MID, b.MNAME, a.BOOK_TITLE, a.AUTHOR, a.PUBLISHER, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, " +
+		String sql = "SELECT a.R_NO, b.M_NO, b.MID, b.MNAME, a.BOOK_TITLE, a.AUTHOR, a.PUBLISHER, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, " +
 					 "a.REGDATE, a.MODDATE, a.M_NO " + 
 					 "FROM recomboard a, member b " + 
 					 "WHERE a.M_NO=b.M_NO AND a.R_NO=?";
@@ -131,7 +131,7 @@ public class RecomBoardDAO {
 			if(rs.next()) {
 				recomBoard = new RecomBoard(
 											rs.getInt("a.R_NO"),
-											new Member(rs.getString("b.MID"), rs.getString("b.MNAME")),
+											new Member(rs.getInt("b.M_NO"),  rs.getString("b.MID"), rs.getString("b.MNAME")),
 											rs.getString("a.BOOK_TITLE"), 
 											rs.getString("a.AUTHOR"), 
 											rs.getString("a.PUBLISHER"), 
@@ -153,17 +153,17 @@ public class RecomBoardDAO {
 		}
 	}
 	
-	public void update(Connection conn, int rNo, int mNo, String bookTitle, String author, String publisher, 
-			String rTitle, String rContent) throws SQLException {
+	public void update(Connection conn, String bookTitle, String author, String publisher, 
+			String rTitle, String rContent, int rNo, int mNo) throws SQLException {
 		
-		System.out.println("RecomBoardDAO 클래스의 update() 메서드 진입");
-		System.out.println("RecomBoard DAO의 데이터 rNo="+rNo+", mNo="+mNo+", bookTitle="+bookTitle+", author="+author+
-				", publisher="+publisher+", rTitle="+rTitle+", rContent="+rContent);
+		System.out.println("RecomBoard DAO 클래스의 update() 메서드 진입");
+		System.out.println("RecomBoard DAO 클래스의 update() 메서드에서 입력한 데이터 ==> bookTitle="+bookTitle+", author="+author +
+				", publisher="+publisher+", rTitle="+rTitle+", rContent="+rContent + ", rNo="+rNo + ", mNo="+mNo);
 		
 		String sql = "update recomboard " + 
-					 "set book_title=?, author?, publisher=?, r_title=?, r_content=?, moddate=now() " + 
+					 "set book_title=?, author=?, publisher=?, r_title=?, r_content=?, moddate=now() " + 
 					 "where r_no=? AND m_no=?";
-		
+
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, bookTitle);

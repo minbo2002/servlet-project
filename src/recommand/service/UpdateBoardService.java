@@ -45,15 +45,15 @@ public class UpdateBoardService {
 			// article 테이블 수정처리 (p668 31번째줄)
 			recomBoardDAO.update(
 								  conn,
-								  updateReq.getrNo(),
-								  updateReq.getUser().getM_no(),
 								  updateReq.getBookTitle(),
 								  updateReq.getAuthor(),
 								  updateReq.getPublisher(),
 								  updateReq.getrTitle(),
-								  updateReq.getrContent()
+								  updateReq.getrContent(),
+								  updateReq.getrNo(),
+								  updateReq.getUser().getM_no()
 								);
-			
+
 			// article_content 테이블 수정처리 (p668 33번째줄)
 			fileDAO.update(
 							conn,
@@ -62,12 +62,13 @@ public class UpdateBoardService {
 							updateReq.getUser().getM_no(),
 							updateReq.getrNo()
   					      );
-		
+
 			conn.commit();
 			
 		}catch (SQLException e) {
 			JdbcUtil.close(conn);
-			throw new RuntimeException();
+			e.printStackTrace();
+			//throw new RuntimeException();
 		
 		}catch (PermissionDeniedException e) {
 			JdbcUtil.rollback(conn);

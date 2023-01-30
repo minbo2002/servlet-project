@@ -68,10 +68,11 @@ public class FileDAO {
 	}
 	
 	public void update(Connection conn, String filename, String fileRealName, int mNo, int rNo) throws SQLException {
-				
+		System.out.println("File DAO 클래스의 update() 메서드 진입");
+		
 		String sql = "INSERT INTO recomfile(file_name, file_real_name, m_no, r_no) " + 
 				 	 "VALUES(?, ?, ?, ?)";
-	
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, filename);

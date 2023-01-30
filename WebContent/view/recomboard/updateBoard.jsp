@@ -92,19 +92,27 @@
 	    	</tr>
 	    	<tr>
 	    		<th>좋아요</th>
-	    		<td>${boardData.recomBoard.likeIt}</td>
+	    		<td>
+	    			<input type="text" name="likeIt" id="likeIt" value="${boardData.recomBoard.likeIt}" readonly="readonly" />
+	    		</td>
 	    	</tr>
 	    	<tr>
 	    		<th>조회수</th>
-	    		<td>${boardData.recomBoard.rCnt}</td>
+	    		<td>
+	    			<input type="text" name="rCnt" id="rCnt" value="${boardData.recomBoard.rCnt}" readonly="readonly" />
+	    		</td>
 	    	</tr>
 	    	<tr>
 	    		<th>작성일</th>
-	    		<td><fmt:formatDate pattern="yyyy년 MM월 dd일 HH시:mm분:ss초" value="${boardData.recomBoard.regDate}"/></td>
+	    		<td>
+	    			<input type="text" name="regDate" id="regDate" value="<fmt:formatDate pattern="yyyy년 MM월 dd일 HH시:mm분:ss초" value="${boardData.recomBoard.regDate}"/>" readonly="readonly" />
+	    		</td>
 	    	</tr>
 	    	<tr>
 	    		<th>수정일</th>
-	    		<td><fmt:formatDate pattern="yyyy년 MM월 dd일 HH시:mm분:ss초" value="${boardData.recomBoard.modDate}"/></td>
+	    		<td>
+	    			<input type="text" name="modDate" id="modDate" value="<fmt:formatDate pattern="yyyy년 MM월 dd일 HH시:mm분:ss초" value="${boardData.recomBoard.modDate}"/>" readonly="readonly" />
+	    		</td>
 	    	</tr>
 	    	<tr>          
 		 		<td colspan="2" style="text-align:center;">

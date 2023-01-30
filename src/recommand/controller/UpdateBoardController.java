@@ -1,5 +1,8 @@
 package recommand.controller;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -123,9 +126,7 @@ public class UpdateBoardController implements CommandHandler {
 	// 수정처리 (p670 66번째줄)
 	private String processSubmit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("ModifyArticleHandler클래스의  POST요청인 processSubmit() 메서드 진입 ");
-		
-		
-		
+
 		String uploadPath = this.getClass().getResource("").getPath();
 		
 		uploadPath = uploadPath.substring(1, uploadPath.indexOf(".metadata")) + 
@@ -138,53 +139,62 @@ public class UpdateBoardController implements CommandHandler {
 		
 		MultipartRequest multipartRequest = new MultipartRequest(request, uploadPath, maxSize, encoding, new DefaultFileRenamePolicy());
 	
-		/*===============================================================================================*/
-		
-		// pageNo : 요청 페이지
-		String strPageNo = multipartRequest.getParameter("pageNo");    // "pageNo" : listArtricle.jsp 파일에서 보고싶은 페이지
-		
-		int pageNo = 1;   // 만약 파라미터 pageNo(요청 페이지)가 null이라면 요청페이지를 1로 설정
+		// pageNo : 보고싶은 페이지
+		String strPageNo = multipartRequest.getParameter("pageNo");
+		int pageNo = 1;   // pageNo=null이라면 보고싶은 페이지 1로 지정
 		if(strPageNo!=null) {
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
-		/*===============================================================================================*/
-		
-		// rowSize : 한페이지에 보여줄 글 갯수
-		String strRowSize = multipartRequest.getParameter("rowSize");  // "rowSize" : listArtricle.jsp 파일에서  <select> 태그의 name 속성값
-		
-		int rowSize = 3;    // 만약 파라미터 size(한페이지에 보여줄 글 갯수)가 null이라면 한페이지에 보여줄 글 갯수를 3으로 설정
+		// rowSize : 한페이지에 보여줄 글 개수
+		String strRowSize = multipartRequest.getParameter("rowSize");
+		int rowSize = 10;    // rowSize=null이라면 한페이지에 보여줄 글 개수3으로 지정
 		if(strRowSize!=null) {
 			rowSize = Integer.parseInt(strRowSize);;
 		}
 		
-		/*===============================================================================================*/
-		
 		User authUser = (User) request.getSession().getAttribute("authUser");
 		
-		// ModifyRequest(로그인한userid, 글번호, db의 title, db의 content)
-		
 		//1.파라미터받기
-		String strNo =  multipartRequest.getParameter("rNo");
+		String strNo =  multipartRequest.getParameter("rNo");  // 상세 조회할 글 번호
 		if(strNo==null) {
 			throw new RuntimeException();  // 만약 파라미터 rNo(해당 게시글번호) 가 null이면 RuntimeException 발생
 		}
-		int rNo = Integer.parseInt(strNo);  // 상세 조회할 글 번호
-		String rtitle = multipartRequest.getParameter("rtitle");
-		String bookTitle = multipartRequest.getParameter("bookTitle");
-		String author = multipartRequest.getParameter("author");
-		String publisher = multipartRequest.getParameter("publisher");
-		String rContent = multipartRequest.getParameter("rContent");
+		int no = Integer.parseInt(strNo);  // 상세 조회할 글 번호
+		String rtitle = multipartRequest.getParameter("rtitle");       // 게시판 제목
+		String bookTitle = multipartRequest.getParameter("bookTitle"); // 책 제목
+		String author = multipartRequest.getParameter("author");	   // 저자
+		String publisher = multipartRequest.getParameter("publisher"); // 출판사
+		String rContent = multipartRequest.getParameter("rContent");   // 게시판 내용
         // 중복된 파일이름이 있기에 fileRealName이 실제로 서버에 저장된 경로이자 파일
 		String filename = multipartRequest.getOriginalFileName("filename");   // finename : 사용자가 올린 파일의 이름이다
 		// 실제 서버에 업로드 된 파일시스템 네임
 		String fileRealName = multipartRequest.getFilesystemName("filename"); //  fileRealName : 실제로 서버에 저장된 경로이자 파일
 		
+		String contentType = multipartRequest.getContentType("filename");
+		System.out.println("contentType="+contentType);
+		File file = multipartRequest.getFile("filename");
+		System.out.println("file="+file);
+		
+		String strlikeIt = multipartRequest.getParameter("likeIt");   
+		int likeIt = Integer.parseInt(strlikeIt);				   // 좋아요
+		String strCnt = multipartRequest.getParameter("rCnt");	   	
+		int rCnt = Integer.parseInt(strCnt);					   // 조회수
+		
+		// String타입을 Date타입으로 변환하는 클래스
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시:mm분:ss초");
+		
+		String strRegDate = multipartRequest.getParameter("regDate"); // 작성일
+		Date regDate = formatter.parse(strRegDate);
+		String strModDate = multipartRequest.getParameter("modDate"); // 수정일
+		Date modDate = formatter.parse(strModDate);
+		
 		UpdateRequest updateReq = new UpdateRequest(
-													rNo, 
+													no, 
 													new User(authUser.getM_no(), authUser.getmId()),
 													bookTitle, author, publisher, rtitle, rContent,
-													new RecomFile(filename, fileRealName) 
+													new RecomFile(filename, fileRealName),
+													likeIt,	rCnt, regDate, modDate
 												   );
 		
 		System.out.println("updateReq = " + updateReq);
@@ -198,17 +208,16 @@ public class UpdateBoardController implements CommandHandler {
 		
 		try {
 			// 2. 비지니스 로직수행 (DB에 update쿼리)
-			/* 
-			 * 파라미터
-			 * ModifyRequest modReq : 글 수정을 위한  -> 수정하는 사용자id, 수정할 글번호, 작성자이름, 수정할 제목, 수정할 내용 
-			 */
 			updateBoardService.update(updateReq);
 			
 			// 3. Model
 			request.setAttribute("updateReq", updateReq);
+			request.setAttribute("pageNo", pageNo);
+			request.setAttribute("rowSize", rowSize);
+			request.setAttribute("no", no);
 			
 			// 4. View
-			return "/view/article/modifySuccess.jsp";
+			return "/view/recomboard/updateSuccessBoard.jsp";
 					
 		}catch (BoardDataNotFoundException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);  // 404 에러
@@ -220,13 +229,7 @@ public class UpdateBoardController implements CommandHandler {
 		}
 	}
 	
-	
-	// 수정권한체크 (p670 61번째줄)
-	/*
-    	파라미터
-		로그인한 유저정보
-		작성자정보
-	*/
+	// 수정권한체크
 	private boolean canModify(User authUser, BoardData boardData) {
 		
 		// 로그인한 유저정보에서 id 가져오기/article/listArticle.do

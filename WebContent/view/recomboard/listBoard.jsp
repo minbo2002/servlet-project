@@ -28,8 +28,10 @@
 </head>
 <body>
 	<%-- ListArticleHandler 컨트롤러에 의해 아래와 같이 Model 받는다
-		 request.setAttribute("boardPage", boardPage); 
-		 request.setAttribute("rowSize", rowSize);
+		request.setAttribute("boardPage", boardPage);
+		request.setAttribute("pageNo", pageNo);
+		request.setAttribute("rowSize", rowSize);
+		request.setAttribute("fileRealName", fileRealName);
 	--%>
 	*세션 : ${authUser} <br/>
 	*pageNo : ${pageNo} <br/>

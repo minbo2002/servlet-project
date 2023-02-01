@@ -116,7 +116,7 @@ public class UpdateBoardController implements CommandHandler {
 		uploadPath = uploadPath.substring(1, uploadPath.indexOf(".metadata")) + 
 				".metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\folder\\uploadImage";
 		
-		System.out.println("uploadPath = " + uploadPath);  // 저장경로에 이미지 저장됨
+		System.out.println("uploadPath = " + uploadPath);  // 이미지가 저장되는 경로
 		
 		int maxSize = 1024 * 1024 * 100;
 		String encoding = "UTF-8";
@@ -141,29 +141,17 @@ public class UpdateBoardController implements CommandHandler {
 		
 		//1.파라미터받기
 		String strNo =  multipartRequest.getParameter("rNo");  // 상세 조회할 글 번호
-		if(strNo==null) {
-			throw new RuntimeException();  // 만약 파라미터 rNo(해당 게시글번호) 가 null이면 RuntimeException 발생
-		}
-		int no = Integer.parseInt(strNo);  // 상세 조회할 글 번호
+		int no = Integer.parseInt(strNo);
 		String rtitle = multipartRequest.getParameter("rtitle");       // 게시판 제목
 		String bookTitle = multipartRequest.getParameter("bookTitle"); // 책 제목
 		String author = multipartRequest.getParameter("author");	   // 저자
 		String publisher = multipartRequest.getParameter("publisher"); // 출판사
 		String rContent = multipartRequest.getParameter("rContent");   // 게시판 내용
-		
-
-		String filename = multipartRequest.getOriginalFileName("filename");
-		String fileRealName = multipartRequest.getFilesystemName("filename");
-		System.out.println("filename="+filename);
-		System.out.println("fileRealName="+fileRealName);
-		
-		String hideFileName = multipartRequest.getParameter("hideFileName");
-        System.out.println("hideFileName="+hideFileName);
-		
-		String strlikeIt = multipartRequest.getParameter("likeIt");   
-		int likeIt = Integer.parseInt(strlikeIt);				   // 좋아요
-		String strCnt = multipartRequest.getParameter("rCnt");	   	
-		int rCnt = Integer.parseInt(strCnt);					   // 조회수
+				
+		String strlikeIt = multipartRequest.getParameter("likeIt");  // 좋아요  
+		int likeIt = Integer.parseInt(strlikeIt);				   
+		String strCnt = multipartRequest.getParameter("rCnt");	 // 조회수
+		int rCnt = Integer.parseInt(strCnt);					  
 		
 		// String타입을 Date타입으로 변환하는 클래스
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시:mm분:ss초");
@@ -172,6 +160,21 @@ public class UpdateBoardController implements CommandHandler {
 		Date regDate = formatter.parse(strRegDate);
 		String strModDate = multipartRequest.getParameter("modDate"); // 수정일
 		Date modDate = formatter.parse(strModDate);
+		
+		String filename = multipartRequest.getOriginalFileName("filename");
+		String fileRealName = multipartRequest.getFilesystemName("filename");
+		System.out.println("filename="+filename);
+		System.out.println("fileRealName="+fileRealName);
+		
+		String hideFileName = multipartRequest.getParameter("hideFileName");
+        System.out.println("hideFileName="+hideFileName);
+		if(filename==null || fileRealName==null) {
+			filename = hideFileName;
+			fileRealName = hideFileName; 
+		}
+		System.out.println("filename="+filename);
+		System.out.println("fileRealName="+fileRealName);
+       
 		
 		UpdateRequest updateReq = new UpdateRequest(
 													no, 

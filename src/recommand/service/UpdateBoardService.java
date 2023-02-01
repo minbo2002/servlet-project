@@ -55,20 +55,20 @@ public class UpdateBoardService {
 								);
 			
 			// 파일이미지는 변경안하고 게시판만 업데이트 할때
-			if(updateReq.getRecomFile().getFilename()==null || updateReq.getRecomFile().getFileRealName()==null) {
-
-				RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
-				System.out.println("조회한 oldFile 데이터 = " + oldFile);
-
-				fileDAO.oldUpdate(
-						 		   conn, 
-						 		   oldFile.getFilename(), 
-						 		   oldFile.getFileRealName(), 
-						 		   oldFile.getM_no(), 
-						 		   oldFile.getR_no(),
-						 		   oldFile.getrFileNo()
-						 		 );
-			}
+//			if(updateReq.getRecomFile().getFilename()==null || updateReq.getRecomFile().getFileRealName()==null) {
+//
+//				RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
+//				System.out.println("조회한 oldFile 데이터 = " + oldFile);
+//
+//				fileDAO.oldUpdate(
+//						 		   conn, 
+//						 		   oldFile.getFilename(), 
+//						 		   oldFile.getFileRealName(), 
+//						 		   oldFile.getM_no(), 
+//						 		   oldFile.getR_no(),
+//						 		   oldFile.getrFileNo()
+//						 		 );
+//			}
 			
 			// 파일이미지 및 게시판 업데이트 할때
 			if(updateReq.getRecomFile().getFilename()!=null || updateReq.getRecomFile().getFileRealName()!=null) {

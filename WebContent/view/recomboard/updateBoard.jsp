@@ -37,6 +37,21 @@
 			}
 		});
 		
+		$("#btnModify").on("click", function() {
+			let v = $("#hideFileName").val();
+			alert(v);
+			let f = $("#filename").val();
+
+			if(f=="") {
+				alert('비어있음');
+				f = $("#hideFileName").val();
+				// $("input[name=filename]").attr("value", $("#hideFileName").val() );
+				alert(f);
+			}
+			$("#updateFrm").submit();
+		});
+		
+		/*
 		$("#btnModify").click(function(){
 			
 			let v = document.querySelector("#filename").value;
@@ -48,6 +63,7 @@
 			}
 			//$("#updateFrm").submit();
 		});
+		*/
 		
 	});
 	</script>
@@ -74,8 +90,7 @@
     <form name="updateFrm" id="updateFrm" method="post" action="<%=request.getContextPath()%>/recomboard/update.do" enctype="multipart/form-data">
 
     	rNo:<input type="text" name="rNo" id="rNo" value="${boardData.recomBoard.rNo}"/><br/>
-    <!-- 	hidFileName:<input type="text" name="hidFileName" id="hidFileName" value="${boardData.recomFile.fileRealName}"/>  -->
-	    <input type="text" name="hideFileName" id="hideFileName" value="${boardData.recomFile.fileRealName}"/>
+	    hideFileName:<input type="text" name="hideFileName" id="hideFileName" value="${boardData.recomFile.fileRealName}"/>
 	    
 	    <table border="1" style="margin: auto;">
 	    	<tr>

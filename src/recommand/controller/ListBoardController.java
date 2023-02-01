@@ -15,15 +15,15 @@ public class ListBoardController implements CommandHandler {
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		
-		// (보고싶은 페이지)
+		// 1. 파라미터받기
+		// pageNo : 보고싶은 페이지 	 
 		String strPageNo = request.getParameter("pageNo");
-		int pageNo = 1;	 // int pageNo : 보고싶은 페이지 	 
+		int pageNo = 1;
 		if(strPageNo!=null) {
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
-		// (한페이지당 보여줄 게시물 개수)
+		// rowSize: 한페이지당 보여줄 글 개수
 		String strRowSize = request.getParameter("rowSize");
 		int rowSize = 1;
 		if(strRowSize==null) {
@@ -32,12 +32,15 @@ public class ListBoardController implements CommandHandler {
 			rowSize = Integer.parseInt(strRowSize);;
 		}
 		
+		// 2. 비지니스로직 <-> Service <-> DAO <-> DB
 		BoardPage boardPage = listBoardService.getBoardPage(pageNo, rowSize);
 		
+		// 3. Model
 		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("rowSize", rowSize);
 		
+		// 4. View
 		return FORM_VIEW;
 	}
 	

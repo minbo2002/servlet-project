@@ -15,9 +15,6 @@ public class ReadBoardController implements CommandHandler {
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		// 1. listBoard.jsp에서 파라미터받기 
-		//    /recomboard/read.do?no=상세조회할 게시판번호&pageNo=요청페이지&rowSize=한페이지에 보여줄 글 갯수 
-		
 		// no : 상세조회할 게시판번호
 		String strNo =  request.getParameter("no");
 		if(strNo==null) {
@@ -32,7 +29,7 @@ public class ReadBoardController implements CommandHandler {
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
-		// rowSize : 한페이지에 보여줄 글 갯수
+		// rowSize : 한페이지에 보여줄 글 개수
 		String strRowSize = request.getParameter("rowSize"); 
 		int rowSize = 10;    // 만약 파라미터 size(한페이지에 보여줄 글 갯수)가 null이라면 한페이지에 보여줄 글 갯수를 3으로 설정
 		if(strRowSize!=null) {

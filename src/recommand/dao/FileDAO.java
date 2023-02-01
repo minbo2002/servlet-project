@@ -68,8 +68,8 @@ public class FileDAO {
 		}
 	}
 	
-	// 파일을 새로운 파일로 변경하고 게시판도 변경할때의 메서드
-	public void update(Connection conn, String filename, String fileRealName, int mNo, int rNo) throws SQLException {
+	// 기존게시판의  게시판데이터 및 파일 데이터를 변경할때 필요한 메서드
+	public void insertForUpdate(Connection conn, String filename, String fileRealName, int mNo, int rNo) throws SQLException {
 		System.out.println("FileDAO 클래스의 update() 메서드 진입");
 
 		String sql = "INSERT INTO recomfile(file_name, file_real_name, m_no, r_no) " + 
@@ -86,51 +86,6 @@ public class FileDAO {
 			System.out.println("생성된 파일 개수 = " + cnt);
 
 		} finally {
-			JdbcUtil.close(pstmt);
-		}
-	}
-	
-	// 파일을 기존의 파일 그대로 사용하고 게시판만 변경할때  파일update 메서드
-	public void oldUpdate(Connection conn, String filename, String fileRealName, int mNo, int rNo, int rFileNo) throws SQLException {
-		System.out.println("FileDAO 클래스의 oldUpdate() 메서드 실행");
-		
-		String sql = "UPDATE recomfile " + 
-					 "SET File_name=?, file_real_name=?, m_no=?, r_no=? " + 
-					 "WHERE r_file_no=?";
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, filename);
-			pstmt.setString(2, fileRealName);
-			pstmt.setInt(3, mNo);
-			pstmt.setInt(4, rNo);
-			pstmt.setInt(5, rFileNo);
-			
-			int cnt = pstmt.executeUpdate();
-			System.out.println("업데이트된 File테이블 데이터 개수 = " + cnt);
-
-		} finally {
-			JdbcUtil.close(pstmt);
-		}
-	}
-	
-	public void deleteForUpdate(Connection conn, int no) {
-		
-		System.out.println("FileDAO클래스의 deleteForUpdate() 메서드 실행");
-		
-		String sql = "DELETE FROM recomfile " + 
-	 	 		   "WHERE r_no=?";
-
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, no);
-			int cnt = pstmt.executeUpdate();
-			System.out.println("삭제된 파일 행 개수="+cnt);
-			
-		}catch (SQLException e) {
-			e.printStackTrace();
-		
-		}finally {
 			JdbcUtil.close(pstmt);
 		}
 	}

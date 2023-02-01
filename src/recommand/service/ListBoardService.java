@@ -12,9 +12,7 @@ import recommand.model.BoardPage;
 public class ListBoardService {
 
 	private RecomBoardDAO recomBoardDAO = new RecomBoardDAO();
-	private int rowSize = 3;
-	
-	
+
 	public BoardPage getBoardPage(int pageNo, int rowSize) {
 		
 		try {

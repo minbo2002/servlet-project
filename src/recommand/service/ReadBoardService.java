@@ -2,16 +2,13 @@ package recommand.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import jdbc.JdbcUtil;
 import jdbc.conn.ConnectionProvider;
-import member.model.User;
 import recommand.dao.FileDAO;
 import recommand.dao.RecomBoardDAO;
 import recommand.domain.RecomBoard;
 import recommand.domain.RecomFile;
 import recommand.exception.BoardDataNotFoundException;
-import recommand.exception.FileDataNotFoundException;
 import recommand.model.BoardData;
 
 public class ReadBoardService {
@@ -27,7 +24,7 @@ public class ReadBoardService {
 			conn = ConnectionProvider.getConnection();
 			System.out.println("no = " + no);
 			
-			// 게시판내용 조회
+			// 게시판 글 조회
 			RecomBoard recomBoard = recomBoardDAO.selectById(conn, no);
 			System.out.println("Service에서 recomBoard = " + recomBoard);
 			
@@ -35,7 +32,7 @@ public class ReadBoardService {
 				throw new BoardDataNotFoundException();
 			}
 			
-			// 이미지 이름조회 (jsp에 이미지 이름으로 불러오는 용도)
+			// 이미지파일 조회
 			RecomFile recomFile = fileDAO.selectById(conn, no);
 			
 			if(increaseReadCount) {
@@ -47,7 +44,6 @@ public class ReadBoardService {
 		} catch (SQLException e) {
 			System.out.println("readBoard() 메서드 실행시 오류 발생");
 			e.printStackTrace();
-			//throw new RuntimeException();
 			return null;
 			
 		} finally {

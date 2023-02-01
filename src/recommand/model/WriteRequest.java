@@ -24,8 +24,7 @@ public class WriteRequest {
 		this.rContent = rContent;
 		this.recomfile = recomfile;
 	}
-	
-	// 메서드
+
 	// 유효성검사 - 필수입력체크
 	public void validate(Map<String, Boolean> errors) {
 		if( bookTitle==null || bookTitle.isEmpty() ) {

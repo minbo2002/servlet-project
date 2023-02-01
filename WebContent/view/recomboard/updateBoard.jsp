@@ -36,35 +36,6 @@
 				location.href = "<%=request.getContextPath()%>/recomboard/delete.do?no=${boardData.recomBoard.rNo}";
 			}
 		});
-		
-		$("#btnModify").on("click", function() {
-			let v = $("#hideFileName").val();
-			alert(v);
-			let f = $("#filename").val();
-
-			if(f=="") {
-				alert('비어있음');
-				f = $("#hideFileName").val();
-				// $("input[name=filename]").attr("value", $("#hideFileName").val() );
-				alert(f);
-			}
-			$("#updateFrm").submit();
-		});
-		
-		/*
-		$("#btnModify").click(function(){
-			
-			let v = document.querySelector("#filename").value;
-			alert(v);
-			
-			if(v == ""){
-				//$("#filename").val($("#hideFileName").val());
-				document.querySelector("#filename").value=document.querySelector("#hideFileName").value;
-			}
-			//$("#updateFrm").submit();
-		});
-		*/
-		
 	});
 	</script>
 	 
@@ -89,8 +60,8 @@
     
     <form name="updateFrm" id="updateFrm" method="post" action="<%=request.getContextPath()%>/recomboard/update.do" enctype="multipart/form-data">
 
-    	rNo:<input type="text" name="rNo" id="rNo" value="${boardData.recomBoard.rNo}"/><br/>
-	    hideFileName:<input type="text" name="hideFileName" id="hideFileName" value="${boardData.recomFile.fileRealName}"/>
+    	<input type="hidden" name="rNo" id="rNo" value="${boardData.recomBoard.rNo}"/><br/>
+	    <input type="hidden" name="hideFileName" id="hideFileName" value="${boardData.recomFile.fileRealName}"/>
 	    
 	    <table border="1" style="margin: auto;">
 	    	<tr>
@@ -124,9 +95,8 @@
 	    	<tr>
 	    		<th>책 이미지</th>
 	    		<td align="center" valign="middle">
-	    			<img src="../uploadImage/${boardData.recomFile.fileRealName}" style="height:300px; width:600px;">
+	    			<img src="../uploadImage/${boardData.recomFile.fileRealName}" style="height:300px; width:600px;"> <br/>
 	    			<input type="file" name="filename" id="filename" />
-	    		<!--	tt:<input type="text" name="tt" id="tt" value="${boardData.recomFile.fileRealName}"/>   -->
 	    		</td>
 	    	</tr>
 	    	<tr>
@@ -161,8 +131,7 @@
 	    	</tr>
 	    	<tr>          
 		 		<td colspan="2" style="text-align:center;">
-					<%-- <input type="submit" value="수정 진행"/> --%>
-					<input type="button"  id="btnModify" value="수정 진행"/>
+					 <input type="submit" value="수정 진행"/>
 		 		</td>
 		 	</tr>
 	    	<tr>
@@ -173,7 +142,6 @@
 	    		</td>
 	    	</tr>
 	    </table>
-	    
 	</form>
 	
 </body>

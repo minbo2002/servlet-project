@@ -19,11 +19,7 @@ public class RecomBoardDAO {
 	PreparedStatement pstmt = null; // insert용
 	Statement stmt = null;  // 조회용
 	ResultSet rs = null;
-	
-	/*
-	   int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
-	   int rowSize : 1페이지당 출력게시물 개수 
-	 */
+
 	public List<RecomBoard> selectAll(Connection conn, int startRow, int rowSize) throws SQLException {
 		
 		String sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
@@ -37,7 +33,7 @@ public class RecomBoardDAO {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, startRow);  // int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
-			pstmt.setInt(2, rowSize);	// int rowSize : 1페이지당 출력게시물 개수
+			pstmt.setInt(2, rowSize);	// int rowSize : 1페이지에 보여줄 글 개수
 			
 			rs = pstmt.executeQuery();
 			System.out.println("rs = " + rs);
@@ -115,10 +111,6 @@ public class RecomBoardDAO {
 					 "a.REGDATE, a.MODDATE, a.M_NO " + 
 					 "FROM recomboard a, member b " + 
 					 "WHERE a.M_NO=b.M_NO AND a.R_NO=?";
-		
-//		String sql = "SELECT R_NO, BOOK_TITLE, AUTHOR, PUBLISHER, R_TITLE, R_CONTENT, LIKE_IT, R_CNT, REGDATE, MODDATE, M_NO " + 
-//					 "FROM recomboard " + 
-//					 "WHERE R_NO=?";
 		
 		RecomBoard recomBoard = null;
 		
@@ -241,13 +233,13 @@ public class RecomBoardDAO {
 		}
 	}
 	
-	// 자바 필드의 Date타입을 DB의 Timestamp 타입으로 변환
+	// 자바 필드의 Date타입을 DB의 Timestamp 타입으로 변환하기
 	private Timestamp toTimestamp(Date date) {
 		
 		return new Timestamp(date.getTime());
 	}
 	
-	// Timestamp -> Date 객체로 변환하기 (p648 47번째줄)
+	// Timestamp -> Date 타입으로 변환하기
 	private Date toDate(Timestamp timestamp) {
 		return new Date(timestamp.getTime());
 	}

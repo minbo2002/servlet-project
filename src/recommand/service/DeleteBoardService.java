@@ -15,7 +15,8 @@ public class DeleteBoardService {
 	private FileDAO fileDAO = new FileDAO();
 	
 	Connection conn = null;
-	int cnt = 0;
+	int delFileCnt = 0;
+	int delBoardCnt = 0;
 	
 	public int deleteBoard(int no) {
 		
@@ -23,17 +24,14 @@ public class DeleteBoardService {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
 			
-			cnt = fileDAO.delete(conn, no);
-//			if(cnt==0) {
-//				throw new FileDataNotFoundException();
-//			}
-			
-//			if(cnt==1) {
-				recomBoardDAO.delete(conn, no);				
-//			}
-			
+			// 삭제된 이미지 파일 개수
+			delFileCnt = fileDAO.delete(conn, no);
+
+			// 삭제된 게시판 글 개수
+			delBoardCnt = recomBoardDAO.delete(conn, no);				
+
 			conn.commit();
-			return cnt;
+			return delBoardCnt;
 			
 		} catch (SQLException e) {
 			JdbcUtil.rollback(conn);
@@ -42,6 +40,6 @@ public class DeleteBoardService {
 			JdbcUtil.close(conn);
 		}
 		
-		return cnt;
+		return delBoardCnt;
 	}
 }

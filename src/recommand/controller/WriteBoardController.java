@@ -49,15 +49,7 @@ public class WriteBoardController implements CommandHandler {
 		
 		return FORM_VIEW;
 	}
-	
-	public User loginedUser(HttpServletRequest request) {
-
-		//로그인한 유저정보는 세션에서 받자
-		User authUser = (User) request.getSession().getAttribute("authUser");  // authUser = User [m_no=11, mId=user1, mName=name1, grade=1, gender=0]
-		System.out.println("authUser = " + authUser);
-		return authUser;
-	}
-		
+			
 	// 추천게시판 등록 데이터 처리(책정보 + 게시판 + 파일)
 	private String processSubmit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("WriteBoardController클래스의  POST요청인 processSubmit() 메서드 진입 ");
@@ -85,7 +77,7 @@ public class WriteBoardController implements CommandHandler {
 		String strRowSize = multipartRequest.getParameter("rowSize");  // "rowSize" : 한페이지당 보여줄 게시물 개수
 		int rowSize = 1;
 		if(strRowSize==null) {
-			rowSize = 3;
+			rowSize = 10;
 		}else {
 			rowSize = Integer.parseInt(strRowSize);;
 		}
@@ -109,11 +101,10 @@ public class WriteBoardController implements CommandHandler {
 		}
 		
 		// 2. 비지니스 로직 수행 <-> Serivce <-> DAO <-> DB
-		int newBoardNo = writeBoardService.writeBoard(writeReq);
-		System.out.println("게시판 생성 개수="+newBoardNo);
+		int cnt = writeBoardService.writeBoard(writeReq);
+		System.out.println("게시판 글 생성 개수="+cnt);
 		
 		// 3. Model
-//		request.setAttribute("newBoardNo", newBoardNo);
 		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("rowSize", rowSize);
 		request.setAttribute("uploadPath", uploadPath);
@@ -132,10 +123,11 @@ public class WriteBoardController implements CommandHandler {
 		String publisher = multipartRequest.getParameter("publisher");
 		String rTitle = multipartRequest.getParameter("rTitle");
 		String rContent = multipartRequest.getParameter("rContent");
-        // 중복된 파일이름이 있기에 fileRealName이 실제로 서버에 저장된 경로이자 파일
-		String filename = multipartRequest.getOriginalFileName("filename");   // finename : 사용자가 올린 파일의 이름이다
-		// 실제 서버에 업로드 된 파일시스템 네임
-		String fileRealName = multipartRequest.getFilesystemName("filename"); //  fileRealName : 실제로 서버에 저장된 경로이자 파일
+		
+		// finename : 사용자가 올린 파일 이름
+		String filename = multipartRequest.getOriginalFileName("filename");
+		// fileRealName : 실제로 서버에 저장된 이름(중복방지)
+		String fileRealName = multipartRequest.getFilesystemName("filename"); 
 		
 		return new WriteRequest( new User(authUser.getM_no(), authUser.getmId(), authUser.getmName(), authUser.getGrade(), authUser.getGender()), 
 								 bookTitle,
@@ -145,6 +137,14 @@ public class WriteBoardController implements CommandHandler {
 								 rContent,
 								 new RecomFile(filename, fileRealName)
 							   );
+	}
+	
+	public User loginedUser(HttpServletRequest request) {
+
+		//로그인한 유저정보는 세션에서 받자
+		User authUser = (User) request.getSession().getAttribute("authUser");  // authUser = User [m_no=11, mId=user1, mName=name1, grade=1, gender=0]
+		System.out.println("authUser = " + authUser);
+		return authUser;
 	}
 
 	

@@ -19,15 +19,15 @@ public class WriteBoardService {
 	
 	Connection conn = null;
 	
-	public Integer writeBoard(WriteRequest writeReq) {  //  WriteRequest writeReq ==> 로그인한 유저id, 유저name, 책제목, 저자, 출판사, 게시판 title, content, like, cnt, date, date
+	public Integer writeBoard(WriteRequest writeReq) {
 		
 		try {
 			conn = ConnectionProvider.getConnection();
-			conn.setAutoCommit(false);  // autocommit 설정해제
+			conn.setAutoCommit(false);
 			
 			Date now = new Date();
 			
-			// 입력한 게시판 데이터 가져오기
+			// 입력한 데이터를 갖는 게시판  객체생성
 			RecomBoard recomBoard = new RecomBoard( 
 													writeReq.getBookTitle(),
 													writeReq.getAuthor(),
@@ -37,22 +37,22 @@ public class WriteBoardService {
 												    0, 0, now, now,
 												    writeReq.getUser().getM_no()
 												  ); 
-
+			// 게시판DB에 저장
 			RecomBoard savedRecomBoard = recomBoardDAO.insert(conn, recomBoard);
 
 			if(savedRecomBoard == null) {
 				throw new RuntimeException("추천게시판 등록 실패");
 			}
 			
-			// 입력한 파일 데이터 가져오기
+			// 입력한 이미지 파일 데이터를 갖는 파일객체 생성
 			RecomFile recomFile = new RecomFile( 
 												 writeReq.getRecomfile().getFilename(), 
 												 writeReq.getRecomfile().getFileRealName(), 
 												 savedRecomBoard.getmNo(), 
 												 savedRecomBoard.getrNo()
 											   );
-			
-			RecomFile savedRecomFile = fileDAO.insert(conn, recomFile, savedRecomBoard);
+			// 파일DB에 저장
+			fileDAO.insert(conn, recomFile, savedRecomBoard);
 			
 			conn.commit();
 

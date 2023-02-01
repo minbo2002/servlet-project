@@ -20,6 +20,109 @@ public class RecomBoardDAO {
 	Statement stmt = null;  // 조회용
 	ResultSet rs = null;
 
+	public List<RecomBoard> selectAllSearch(Connection conn, int startRow, int rowSize, String col, String word) throws SQLException {
+		
+		System.out.println("startRow="+startRow+", rowSize="+rowSize+", col="+col+", word="+word);
+		
+		List<RecomBoard> boardList = new ArrayList<RecomBoard>();
+		
+		String sql = "";
+		
+		try {
+			if(col.equals("none")) {  // 아이디, 제목, 내용
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
+						 	 "FROM recomboard a, member b " + 
+						 	 "WHERE a.M_NO=b.M_NO AND b.MID LIKE '%'||?||'%' OR a.R_TITLE LIKE '%'||?||'%' OR a.R_CONTENT LIKE '%'||?||'%' " + 
+						 	 "order BY a.R_NO desc LIMIT ?,?";    
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, word);
+				pstmt.setString(2, word);
+				pstmt.setString(3, word);
+				pstmt.setInt(4, startRow);  
+				pstmt.setInt(5, rowSize);	
+	
+			}else if(col.equals("searchId")) {  // 아이디
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO" + 
+							 "FROM recomboard a, member b " + 
+							 "WHERE a.M_NO=b.M_NO AND b.MID LIKE '%'||?||'%' " + 
+							 "order BY a.R_NO desc LIMIT ?,?";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, word);
+				pstmt.setInt(2, startRow); 
+				pstmt.setInt(3, rowSize);	
+					
+			}else if(col.equals("searchTitle")) {  // 제목
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
+					 	 	 "FROM recomboard a, member b " + 
+					 	 	 "WHERE a.M_NO=b.M_NO AND a.R_TITLE LIKE '%'||?||'%' " + 
+					 	 	 "order BY a.R_NO desc LIMIT ?,?";
+			
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, word);
+				pstmt.setInt(2, startRow);  
+				pstmt.setInt(3, rowSize);	
+				
+			}else if(col.equals("searchContent")) {  // 내용
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
+					 	 "FROM recomboard a, member b " + 
+					 	 "WHERE a.M_NO=b.M_NO AND a.R_CONTENT LIKE '%'||?||'%' " + 
+					 	 "order BY a.R_NO desc LIMIT ?,?";
+			
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, word);
+				pstmt.setInt(2, startRow); 
+				pstmt.setInt(3, rowSize);
+				
+			}else if(col.equals("searchTitleContent")) {  // 제목+내용
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
+					 	 "FROM recomboard a, member b " + 
+					 	 "WHERE a.M_NO=b.M_NO AND a.R_TITLE LIKE '%'||?||'%' OR a.R_CONTENT LIKE '%'||?||'%' " + 
+					 	 "order BY a.R_NO desc LIMIT ?,?";
+			
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, word);
+				pstmt.setString(2, word);
+				pstmt.setInt(3, startRow); 
+				pstmt.setInt(4, rowSize);
+				
+			} else {  // 검색어가 없는 전체목록
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
+						 "FROM recomboard a, member b " + 
+						 "WHERE a.M_NO=b.M_NO " + 
+						 "order BY a.R_NO desc LIMIT ?,?";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, startRow);  // int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
+				pstmt.setInt(2, rowSize);	// int rowSize : 1페이지에 보여줄 글 개수				
+			}
+			
+			rs = pstmt.executeQuery();
+			System.out.println("rs = " + rs);
+			
+			while(rs.next()) {
+				RecomBoard board = convertBoard(rs);
+
+				boardList.add(board);					
+			}
+			
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+		
+		return boardList;
+	}
+	
+
 	public List<RecomBoard> selectAll(Connection conn, int startRow, int rowSize) throws SQLException {
 		
 		String sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
@@ -50,6 +153,7 @@ public class RecomBoardDAO {
 			JdbcUtil.close(pstmt);
 		}
 	}
+
 	
 	// 글쓰기
 	// 매개변수 WriteRequest : Writer(로그인한 유저id, 로그인한 유저명), 입력제목, 입력내용

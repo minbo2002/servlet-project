@@ -37,6 +37,20 @@
 	*pageNo : ${pageNo} <br/>
 	*rowSize : ${rowSize} <br/>
 	
+	<form name="frm" method="post" action="<%=request.getContextPath()%>/recomboard/listboard.do">	
+		<select name="col">
+			<option value="">선택</option>
+			<option value="searchId">아이디</option>
+			<option value="searchTitle">제목</option>
+			<option value="searchContent">내용</option>
+			<option value="searchTitleContent">제목+내용</option>
+			<option value="none">아이디+제목+내용</option>
+		</select>
+		<input type="text" name="word" value="" placeholder="특수문자는 사용할수 없습니다.">
+		<button type="submit">검색</button>    
+	</form>
+	
+	
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 	<h2>추천게시판 목록페이지</h2>
     

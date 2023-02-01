@@ -21,7 +21,7 @@ public class UpdateBoardService {
 	
 	public void update(UpdateRequest updateReq) {
 		Connection conn = null;
-		
+//		RecomBoard recomBoard =  null;
 		try {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
@@ -42,7 +42,7 @@ public class UpdateBoardService {
 				throw new PermissionDeniedException();
 			}
 			
-			// article 테이블 수정처리 (p668 31번째줄)
+			// 게시판 업데이트
 			recomBoardDAO.update(
 								  conn,
 								  updateReq.getBookTitle(),
@@ -53,15 +53,38 @@ public class UpdateBoardService {
 								  updateReq.getrNo(),
 								  updateReq.getUser().getM_no()
 								);
+			
+			// 파일이미지는 변경안하고 게시판만 업데이트 할때
+			if(updateReq.getRecomFile().getFilename()==null || updateReq.getRecomFile().getFileRealName()==null) {
 
-			// article_content 테이블 수정처리 (p668 33번째줄)
-			fileDAO.update(
-							conn,
-							updateReq.getRecomFile().getFilename(), 
-							updateReq.getRecomFile().getFileRealName(),
-							updateReq.getUser().getM_no(),
-							updateReq.getrNo()
-  					      );
+				RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
+				System.out.println("조회한 oldFile 데이터 = " + oldFile);
+
+				fileDAO.oldUpdate(
+						 		   conn, 
+						 		   oldFile.getFilename(), 
+						 		   oldFile.getFileRealName(), 
+						 		   oldFile.getM_no(), 
+						 		   oldFile.getR_no(),
+						 		   oldFile.getrFileNo()
+						 		 );
+			}
+			
+			// 파일이미지 및 게시판 업데이트 할때
+			if(updateReq.getRecomFile().getFilename()!=null || updateReq.getRecomFile().getFileRealName()!=null) {
+				
+				RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
+				
+				fileDAO.deleteForUpdate(conn, oldFile.getR_no());
+				
+				fileDAO.update(
+						conn,
+						updateReq.getRecomFile().getFilename(), 
+						updateReq.getRecomFile().getFileRealName(),
+						updateReq.getUser().getM_no(),
+						updateReq.getrNo()
+					   );
+			}
 
 			conn.commit();
 			
@@ -77,6 +100,7 @@ public class UpdateBoardService {
 		}finally {
 			JdbcUtil.close(conn);
 		}
+//		return recomBoard;
 	}
 	
 	private boolean canModify(String modifingUserId, RecomBoard recomBoard) {

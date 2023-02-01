@@ -17,14 +17,14 @@ public class ListBoardController implements CommandHandler {
 
 		
 		// (보고싶은 페이지)
-		String strPageNo = request.getParameter("pageNo");    // "pageNo" : 보고싶은 페이지
+		String strPageNo = request.getParameter("pageNo");
 		int pageNo = 1;	 // int pageNo : 보고싶은 페이지 	 
 		if(strPageNo!=null) {
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
 		// (한페이지당 보여줄 게시물 개수)
-		String strRowSize = request.getParameter("rowSize");  // "rowSize" : 한페이지당 보여줄 게시물 개수
+		String strRowSize = request.getParameter("rowSize");
 		int rowSize = 1;
 		if(strRowSize==null) {
 			rowSize = 10;

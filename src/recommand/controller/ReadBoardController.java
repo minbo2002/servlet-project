@@ -25,18 +25,15 @@ public class ReadBoardController implements CommandHandler {
 		}
 		int no = Integer.parseInt(strNo);
 
-		
 		// pageNo : 요청 페이지
-		String strPageNo = request.getParameter("pageNo");    // "pageNo" : listArtricle.jsp 파일에서 보고싶은 페이지
-		
+		String strPageNo = request.getParameter("pageNo");
 		int pageNo = 1;   // 만약 파라미터 pageNo(요청 페이지)가 null이라면 요청페이지를 1로 설정
 		if(strPageNo!=null) {
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
 		// rowSize : 한페이지에 보여줄 글 갯수
-		String strRowSize = request.getParameter("rowSize");  // "rowSize" : listArtricle.jsp 파일에서  <select> 태그의 name 속성값
-		
+		String strRowSize = request.getParameter("rowSize"); 
 		int rowSize = 10;    // 만약 파라미터 size(한페이지에 보여줄 글 갯수)가 null이라면 한페이지에 보여줄 글 갯수를 3으로 설정
 		if(strRowSize!=null) {
 			rowSize = Integer.parseInt(strRowSize);;

@@ -25,29 +25,11 @@
 	 
 </head>
 <body>
-	<%-- WriteArticleHandler 컨트롤러의 GET방식에 의해 아래와 같은 Model을 받는다
-		 
-		 class User {
-			private int m_no;
-			private String mId;
-			private String mName;
-			private int grade;
-			private String gender;
-		 }
-		 -->  request.getSession().setAttribute("authUser", user);	
-		 
-		 -->  request.setAttribute("rowSize", rowSize);
-		 
-		 -->  request.setAttribute("newArticleNo", newArticleNo); ??????????
-		 
-		 // 에러정보
-		 errors.put("bInfoTitle", Boolean.TRUE);
-		 errors.put("author", Boolean.TRUE);
-		 errors.put("publisher", Boolean.TRUE);
-		 errors.put("rTitle", Boolean.TRUE);
-		 errors.put("rContent", Boolean.TRUE);
-		 
-		 -->  request.setAttribute("errors", errors);		 
+	<%--WriteBoardController에서 아래와 같은 Model 받는다
+	
+	 	request.setAttribute("boardPage", boardPage);
+		request.setAttribute("rowSize", rowSize);
+		request.setAttribute("uploadPath", uploadPath);
 	--%>
 	*세션 : ${authUser} <br/>
 	*보고싶은 페이지 pageNo : ${pageNo} <br/>
@@ -62,19 +44,9 @@
     
 	<form name="writeFrm" id="writeFrm" method="post" action="<%=request.getContextPath()%>/recomboard/write.do" enctype="multipart/form-data">
 
-		<!--  번호와 작성자명의 type="text"라면 수정이 가능하므로 type="hidden" 방식으로 name속성에 값만 담아서 POST방식으로 컨트롤러에 보낸다  -->
-		<%--
-		 <input type="hidden" name="no" id="no" value="${modReq.articleNumber}"/>
-		 <input type="hidden" name="writer_name" id="writer_name" value="${modReq.writer_name}">
-		--%>
-		 
 		<input type="hidden" name="rowSize" id="rowSize" value="${rowSize}"/>
 		 
 		<table border="1">
-	   <!-- <tr>
-		 		<th>작성자명</th>
-		 		<td>${AUTHUSER.membername}</td>
-		 	</tr>  -->
 		 	<tr>
 		 		<th>책제목</th>
 		 		<td>

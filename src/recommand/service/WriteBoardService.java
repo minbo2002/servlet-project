@@ -37,9 +37,9 @@ public class WriteBoardService {
 												    0, 0, now, now,
 												    writeReq.getUser().getM_no()
 												  ); 
-			System.out.println("서비스 recomBoard="+recomBoard);
+
 			RecomBoard savedRecomBoard = recomBoardDAO.insert(conn, recomBoard);
-			System.out.println("savedRecomBoard="+savedRecomBoard);
+
 			if(savedRecomBoard == null) {
 				throw new RuntimeException("추천게시판 등록 실패");
 			}
@@ -53,10 +53,6 @@ public class WriteBoardService {
 											   );
 			
 			RecomFile savedRecomFile = fileDAO.insert(conn, recomFile, savedRecomBoard);
-			System.out.println("savedRecomFile="+savedRecomFile);
-//			if(savedRecomFile == null) {
-//				throw new RuntimeException("이미지 등록 실패");
-//			}
 			
 			conn.commit();
 

@@ -14,7 +14,20 @@
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	
 	<style>
-
+		.center {
+			text-align: center;
+		}
+		table, td, th {
+			border: 1px solid; #ddd;
+			text-align: left;
+		}
+		table {
+			border-collapse: collapse;
+			width: 70%;
+		}
+		td, th {
+			padding: 5px;
+		}
 	</style>
 	
 	<script>
@@ -22,20 +35,22 @@
 		
 		$("#btnList").click(function() {
 
-			location.href="/recomboard/listboard.do?pageNo="+${pageNo}+"&rowSize="+${rowSize}
+			location.href="<%=request.getContextPath()%>/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}";
 
 		});
 		
 		$("#btnDelete").click(function(no) {
-			
-			no = ${boardData.recomBoard.rNo};
-			
+
 			if(confirm("삭제하시겠습니까?")) {
-				location.href = "/recomboard/delete.do?no="+no;
+				location.href = "<%=request.getContextPath()%>/recomboard/delete.do?no=${boardData.recomBoard.rNo}";
 			}
 		});
 		
-		
+		$("#btnUpdate").click(function(no) {
+
+			location.href = "<%=request.getContextPath()%>/recomboard/update.do?no=${boardData.recomBoard.rNo}&pageNo=${pageNo}&rowSize=${rowSize}";
+
+		});
 	});
 	</script>
 	 
@@ -110,13 +125,12 @@
     	</tr>
     	<tr>
     		<td colspan="2" style="text-align: center;">	
-   			<c:set var="pageNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>	  <!-- parameter인 pageNo가 비어있다면 pageNo=1  pageNo이 비어있지않다면 해당 pageNo값을 가져간다  -->
-  				<!-- <a href="/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}">목록보기</a> -->
+   			<c:set var="pageNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>
    				<input type="button" value="목록 이동" id="btnList">
    				
    			<c:if test="${authUser.mId==boardData.recomBoard.member.mId}">
    				<input type="button" value="삭제하기" id="btnDelete">
-    			<a href="/recomboard/update.do?no=${boardData.recomBoard.rNo}&pageNo=${pageNo}&rowSize=${rowSize}">글 수정</a>		
+   				<input type="button" value="글 수정" id="btnUpdate">
    			</c:if>   		
     		</td>
     	</tr>

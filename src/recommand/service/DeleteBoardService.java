@@ -24,13 +24,13 @@ public class DeleteBoardService {
 			conn.setAutoCommit(false);
 			
 			cnt = fileDAO.delete(conn, no);
-			if(cnt==0) {
-				throw new FileDataNotFoundException();
-			}
+//			if(cnt==0) {
+//				throw new FileDataNotFoundException();
+//			}
 			
-			if(cnt==1) {
+//			if(cnt==1) {
 				recomBoardDAO.delete(conn, no);				
-			}
+//			}
 			
 			conn.commit();
 			return cnt;

@@ -22,6 +22,33 @@
 
 		   $("#rowSizeFrm").submit();
 		});
+		
+		
+		$("#btnList").click(function() {
+
+			location.href="<%=request.getContextPath()%>/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}";
+
+		});
+		
+		$("#btnDelete").click(function(no) {
+
+			if(confirm("삭제하시겠습니까?")) {
+				location.href = "<%=request.getContextPath()%>/recomboard/delete.do?no=${boardData.recomBoard.rNo}";
+			}
+		});
+		
+		$("#btnModify").click(function(){
+			
+			let v = document.querySelector("#filename").value;
+			alert(v);
+			
+			if(v == ""){
+				//$("#filename").val($("#hideFileName").val());
+				document.querySelector("#filename").value=document.querySelector("#hideFileName").value;
+			}
+			//$("#updateFrm").submit();
+		});
+		
 	});
 	</script>
 	 
@@ -45,9 +72,11 @@
     <hr/>
     
     <form name="updateFrm" id="updateFrm" method="post" action="<%=request.getContextPath()%>/recomboard/update.do" enctype="multipart/form-data">
-    
-    	<input type="hidden" name="rNo" id="rNo" value="${boardData.recomBoard.rNo}"/>
-    
+
+    	rNo:<input type="text" name="rNo" id="rNo" value="${boardData.recomBoard.rNo}"/><br/>
+    <!-- 	hidFileName:<input type="text" name="hidFileName" id="hidFileName" value="${boardData.recomFile.fileRealName}"/>  -->
+	    <input type="text" name="hideFileName" id="hideFileName" value="${boardData.recomFile.fileRealName}"/>
+	    
 	    <table border="1" style="margin: auto;">
 	    	<tr>
 	    		<th>작성자 아이디</th>
@@ -82,6 +111,7 @@
 	    		<td align="center" valign="middle">
 	    			<img src="../uploadImage/${boardData.recomFile.fileRealName}" style="height:300px; width:600px;">
 	    			<input type="file" name="filename" id="filename" />
+	    		<!--	tt:<input type="text" name="tt" id="tt" value="${boardData.recomFile.fileRealName}"/>   -->
 	    		</td>
 	    	</tr>
 	    	<tr>
@@ -116,14 +146,15 @@
 	    	</tr>
 	    	<tr>          
 		 		<td colspan="2" style="text-align:center;">
-					<input type="submit" value="수정하기"/>
+					<%-- <input type="submit" value="수정 진행"/> --%>
+					<input type="button"  id="btnModify" value="수정 진행"/>
 		 		</td>
 		 	</tr>
 	    	<tr>
 	    		<td colspan="2" style="text-align: center;">	
-	   			<c:set var="pageNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>	  <!-- parameter인 pageNo가 비어있다면 pageNo=1  pageNo이 비어있지않다면 해당 pageNo값을 가져간다  -->
-	  				<a href="/recomboard/listboard.do?pageNo=${pageNo}&rowSize=${rowSize}">목록보기</a>
-	   				<a href="/recomboard/delete.do?no=${boardData.recomBoard.rNo}">글 삭제(delete용)</a>   		
+	   			<c:set var="pageNo" value="${ (empty param.pageNo) ? '1' : param.pageNo }"></c:set>
+	  				<input type="button" value="목록 이동" id="btnList">
+	  				<input type="button" value="삭제하기" id="btnDelete">  		
 	    		</td>
 	    	</tr>
 	    </table>

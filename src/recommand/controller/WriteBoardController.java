@@ -43,7 +43,7 @@ public class WriteBoardController implements CommandHandler {
 		
 		String rowSize = request.getParameter("rowSize");  // 등록폼애서 목록으로 이동할때 사용
 		
-		User authUser = loginedUser(request);		 // authUser = User [m_no=11, mId=user1, mName=name1, grade=1, gender=0]
+		User authUser = loginedUser(request);		 // ex) authUser = User [m_no=11, mId=user1, mName=name1, grade=1, gender=0]
 		request.setAttribute("authUser", authUser);
 		request.setAttribute("rowSize", rowSize);
 		
@@ -100,8 +100,8 @@ public class WriteBoardController implements CommandHandler {
 		
 		WriteRequest writeReq = createWriteRequest(authUser, multipartRequest);
 		System.out.println("writeReq ="+writeReq);
-		writeReq.validate(errors);  // bInfoTitle(책제목), author(저자), publisher(출판사), rTitle(게시판제목), rContent(게시판내용) 유효성 검사
-		request.setAttribute("errors", errors);  // p641 37번째 줄
+		writeReq.validate(errors);
+		request.setAttribute("errors", errors);
 		                      
 		if(!errors.isEmpty()) {
 			request.setAttribute("rowSize", rowSize);
@@ -109,13 +109,14 @@ public class WriteBoardController implements CommandHandler {
 		}
 		
 		// 2. 비지니스 로직 수행 <-> Serivce <-> DAO <-> DB
-		int newBoardNo = writeBoardService.writeBoard(writeReq);  // Integer타입 -> int타입  변환 (unboxing)
+		int newBoardNo = writeBoardService.writeBoard(writeReq);
+		System.out.println("게시판 생성 개수="+newBoardNo);
 		
 		// 3. Model
-		request.setAttribute("newBoardNo", newBoardNo);  // newArticleNo : 새로 생성된 article_no (PK)
+//		request.setAttribute("newBoardNo", newBoardNo);
 		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("rowSize", rowSize);
-		request.setAttribute("uploadPath", uploadPath);  // 파일 저장위치
+		request.setAttribute("uploadPath", uploadPath);
 		
 		// 4. View
 		response.sendRedirect(request.getContextPath()+"/recomboard/listboard.do");

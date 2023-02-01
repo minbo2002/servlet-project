@@ -34,10 +34,10 @@ public class UpdateBoardController implements CommandHandler {
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		if(request.getMethod().equalsIgnoreCase("GET")) {
-			return processForm(request, response);  //  비밀번호변경 form 보여주는 요청
+			return processForm(request, response);
 			
 		}else if(request.getMethod().equalsIgnoreCase("POST")) {
-			return processSubmit(request, response);  // 비밀번호 변경 데이터 처리
+			return processSubmit(request, response);
 		
 		}else {
 			/*  상태코드 : SC_METHOD_NOT_ALLOWED
@@ -49,7 +49,6 @@ public class UpdateBoardController implements CommandHandler {
 		}
 	}
 	
-	// (해당게시글의 정보가 출력되어있는) 수정폼으로 이동 (p669 38번쨰줄)
 	private String processForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("UpdateBoardController클래스의  GET요청인 processForm() 메서드 진입 ");
 		
@@ -62,34 +61,25 @@ public class UpdateBoardController implements CommandHandler {
 			}
 			int no = Integer.parseInt(strNo);  // 상세 조회할 글 번호
 
-			/*===============================================================================================*/
-			
 			// pageNo : 요청 페이지
-			String strPageNo = request.getParameter("pageNo");    // "pageNo" : listArtricle.jsp 파일에서 보고싶은 페이지
-			
+			String strPageNo = request.getParameter("pageNo");
 			int pageNo = 1;   // 만약 파라미터 pageNo(요청 페이지)가 null이라면 요청페이지를 1로 설정
 			if(strPageNo!=null) {
 				pageNo = Integer.parseInt(strPageNo);
 			}
 			
-			/*===============================================================================================*/
-			
 			// rowSize : 한페이지에 보여줄 글 갯수
-			String strRowSize = request.getParameter("rowSize");  // "rowSize" : listArtricle.jsp 파일에서  <select> 태그의 name 속성값
-			
+			String strRowSize = request.getParameter("rowSize"); 
 			int rowSize = 3;    // 만약 파라미터 size(한페이지에 보여줄 글 갯수)가 null이라면 한페이지에 보여줄 글 갯수를 3으로 설정
 			if(strRowSize!=null) {
 				rowSize = Integer.parseInt(strRowSize);;
 			}
 			
-			/*===============================================================================================*/
-			
 			// 2. 비지니스 로직 수행 <-> Serivce <-> DAO <-> DB
-			/*
-			        파라미터
+			
+			/*  파라미터
 			    int no : 상세조회 할 글번호
-			    boolean increaseReadCount : false 여기서ㅐ는 수정을 위해 상세보기를 진행하므로 조회수 증가를 하지 않는다.
-			 */
+			    boolean increaseReadCount : false 여기서는 수정 상세페이지로 가므로 조회수 증가시키지 않는다.  */
 			BoardData boardData = readBoardService.readBoard(no, false);
 			
 			// 로그인한 회원은 자신의 글에 대해서만 내용을 수정할 수 있어야 한다.
@@ -98,15 +88,9 @@ public class UpdateBoardController implements CommandHandler {
 			
 			// 조건2) 로그인한 회원은 자신의 글인가? (로그인한 user의 id와  작성자의 id 일치여부)
 			if(!canModify(authUser, boardData)) { // 수정불가이면
-				response.sendError(HttpServletResponse.SC_FORBIDDEN); // 403error
+				response.sendError(HttpServletResponse.SC_FORBIDDEN); // HttpServletResponse.SC_FORBIDDEN: 403에러 (클라이언트가 서버에 도달해도 서버가 페이지 접근허용 거부)
 				return null;
 			}
-			/*참고 
-			 * HttpServletResponse.SC_FORBIDDEN: 403에러
-			 서버가 허용하지 않는 웹 페이지나 미디어를 사용자가 요청할 때 
-			 웹 서버가 반환하는 HTTP 상태 코드이다. 
-			 다시 말해, 클라이언트가 서버에 도달할 수 있어도 
-			 서버가 페이지 접근 허용을 거부했다는 것을 뜻한다*/
 			
 			// 3. Model & View
 			request.setAttribute("boardData", boardData);
@@ -166,15 +150,15 @@ public class UpdateBoardController implements CommandHandler {
 		String author = multipartRequest.getParameter("author");	   // 저자
 		String publisher = multipartRequest.getParameter("publisher"); // 출판사
 		String rContent = multipartRequest.getParameter("rContent");   // 게시판 내용
-        // 중복된 파일이름이 있기에 fileRealName이 실제로 서버에 저장된 경로이자 파일
-		String filename = multipartRequest.getOriginalFileName("filename");   // finename : 사용자가 올린 파일의 이름이다
-		// 실제 서버에 업로드 된 파일시스템 네임
-		String fileRealName = multipartRequest.getFilesystemName("filename"); //  fileRealName : 실제로 서버에 저장된 경로이자 파일
 		
-		String contentType = multipartRequest.getContentType("filename");
-		System.out.println("contentType="+contentType);
-		File file = multipartRequest.getFile("filename");
-		System.out.println("file="+file);
+
+		String filename = multipartRequest.getOriginalFileName("filename");
+		String fileRealName = multipartRequest.getFilesystemName("filename");
+		System.out.println("filename="+filename);
+		System.out.println("fileRealName="+fileRealName);
+		
+		String hideFileName = multipartRequest.getParameter("hideFileName");
+        System.out.println("hideFileName="+hideFileName);
 		
 		String strlikeIt = multipartRequest.getParameter("likeIt");   
 		int likeIt = Integer.parseInt(strlikeIt);				   // 좋아요
@@ -209,6 +193,8 @@ public class UpdateBoardController implements CommandHandler {
 		try {
 			// 2. 비지니스 로직수행 (DB에 update쿼리)
 			updateBoardService.update(updateReq);
+			
+			System.out.println("비지니스 로직 수행한 다음의 updateReq = " + updateReq);
 			
 			// 3. Model
 			request.setAttribute("updateReq", updateReq);

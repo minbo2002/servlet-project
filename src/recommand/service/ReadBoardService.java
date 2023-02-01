@@ -37,9 +37,6 @@ public class ReadBoardService {
 			
 			// 이미지 이름조회 (jsp에 이미지 이름으로 불러오는 용도)
 			RecomFile recomFile = fileDAO.selectById(conn, no);
-			if(recomFile==null) {
-				throw new FileDataNotFoundException();
-			}
 			
 			if(increaseReadCount) {
 				recomBoardDAO.increaseReadCount(conn, no);

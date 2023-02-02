@@ -22,7 +22,7 @@ public class RecomBoardDAO {
 
 	public List<RecomBoard> selectAllSearch(Connection conn, int startRow, int rowSize, String col, String word) throws SQLException {
 		
-		System.out.println("startRow="+startRow+", rowSize="+rowSize+", col="+col+", word="+word);
+		System.out.println("DAO 내부의 selectAllSearch() 메서드의 파라미터값들 => startRow="+startRow+", rowSize="+rowSize+", col="+col+", word="+word);
 		
 		List<RecomBoard> boardList = new ArrayList<RecomBoard>();
 		
@@ -31,9 +31,12 @@ public class RecomBoardDAO {
 		try {
 			if(col.equals("none")) {  // 아이디, 제목, 내용
 				
+				System.out.println("col이 none일경우");
+				
 				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 						 	 "FROM recomboard a, member b " + 
-						 	 "WHERE a.M_NO=b.M_NO AND b.MID LIKE '%'||?||'%' OR a.R_TITLE LIKE '%'||?||'%' OR a.R_CONTENT LIKE '%'||?||'%' " + 
+						 	 "WHERE a.M_NO=b.M_NO AND b.MID LIKE CONCAT('%',CONCAT(?,'%')) OR a.R_TITLE LIKE CONCAT('%',CONCAT(?,'%')) " +
+						 	 "OR a.R_CONTENT LIKE CONCAT('%',CONCAT(?,'%')) " + 
 						 	 "order BY a.R_NO desc LIMIT ?,?";    
 				
 				pstmt = conn.prepareStatement(sql);
@@ -41,13 +44,16 @@ public class RecomBoardDAO {
 				pstmt.setString(2, word);
 				pstmt.setString(3, word);
 				pstmt.setInt(4, startRow);  
-				pstmt.setInt(5, rowSize);	
+				pstmt.setInt(5, rowSize);
 	
 			}else if(col.equals("searchId")) {  // 아이디
 				
-				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO" + 
+				System.out.println("col이 searchId일경우");
+				
+				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 							 "FROM recomboard a, member b " + 
-							 "WHERE a.M_NO=b.M_NO AND b.MID LIKE '%'||?||'%' " + 
+//							 "WHERE a.M_NO=b.M_NO AND b.MID LIKE     '%'||?||'%' " + 
+							 "WHERE a.M_NO=b.M_NO AND b.MID LIKE CONCAT('%',CONCAT(?,'%')) " + 
 							 "order BY a.R_NO desc LIMIT ?,?";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -57,9 +63,11 @@ public class RecomBoardDAO {
 					
 			}else if(col.equals("searchTitle")) {  // 제목
 				
+				System.out.println("col이 searchTitle일경우");
+				
 				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 					 	 	 "FROM recomboard a, member b " + 
-					 	 	 "WHERE a.M_NO=b.M_NO AND a.R_TITLE LIKE '%'||?||'%' " + 
+					 	 	 "WHERE a.M_NO=b.M_NO AND a.R_TITLE LIKE CONCAT('%',CONCAT(?,'%')) " + 
 					 	 	 "order BY a.R_NO desc LIMIT ?,?";
 			
 				pstmt = conn.prepareStatement(sql);
@@ -67,11 +75,16 @@ public class RecomBoardDAO {
 				pstmt.setInt(2, startRow);  
 				pstmt.setInt(3, rowSize);	
 				
+				rs = pstmt.executeQuery();
+				System.out.println("rs = " + rs);
+				
 			}else if(col.equals("searchContent")) {  // 내용
+				
+				System.out.println("col이 searchContent일경우");
 				
 				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 					 	 "FROM recomboard a, member b " + 
-					 	 "WHERE a.M_NO=b.M_NO AND a.R_CONTENT LIKE '%'||?||'%' " + 
+					 	 "WHERE a.M_NO=b.M_NO AND a.R_CONTENT LIKE CONCAT('%',CONCAT(?,'%')) " + 
 					 	 "order BY a.R_NO desc LIMIT ?,?";
 			
 				pstmt = conn.prepareStatement(sql);
@@ -81,9 +94,11 @@ public class RecomBoardDAO {
 				
 			}else if(col.equals("searchTitleContent")) {  // 제목+내용
 				
+				System.out.println("col이 searchTitleContent일경우");
+				
 				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 					 	 "FROM recomboard a, member b " + 
-					 	 "WHERE a.M_NO=b.M_NO AND a.R_TITLE LIKE '%'||?||'%' OR a.R_CONTENT LIKE '%'||?||'%' " + 
+					 	 "WHERE a.M_NO=b.M_NO AND a.R_TITLE LIKE CONCAT('%',CONCAT(?,'%')) OR a.R_CONTENT LIKE CONCAT('%',CONCAT(?,'%')) " + 
 					 	 "order BY a.R_NO desc LIMIT ?,?";
 			
 				pstmt = conn.prepareStatement(sql);
@@ -94,6 +109,8 @@ public class RecomBoardDAO {
 				
 			} else {  // 검색어가 없는 전체목록
 				
+				System.out.println("col이 없는경우. 즉 전체 목록 조회");
+				
 				sql = "SELECT a.R_NO, b.MID, b.MNAME, a.R_TITLE, a.R_CONTENT, a.LIKE_IT, a.R_CNT, a.REGDATE, a.MODDATE, a.M_NO " + 
 						 "FROM recomboard a, member b " + 
 						 "WHERE a.M_NO=b.M_NO " + 
@@ -102,24 +119,28 @@ public class RecomBoardDAO {
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setInt(1, startRow);  // int startRow : 시작행 index번호를 의미. 가장 첫번째행은 0부터 시작.
-				pstmt.setInt(2, rowSize);	// int rowSize : 1페이지에 보여줄 글 개수				
+				pstmt.setInt(2, rowSize);	// int rowSize : 1페이지에 보여줄 글 개수			
+
 			}
 			
 			rs = pstmt.executeQuery();
 			System.out.println("rs = " + rs);
-			
+
 			while(rs.next()) {
 				RecomBoard board = convertBoard(rs);
 
-				boardList.add(board);					
+				boardList.add(board);	
 			}
+			
+			System.out.println("boardList="+boardList);
+			
+			return boardList;
 			
 		} finally {
 			JdbcUtil.close(rs);
 			JdbcUtil.close(pstmt);
 		}
 		
-		return boardList;
 	}
 	
 

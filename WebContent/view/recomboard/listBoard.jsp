@@ -31,11 +31,17 @@
 		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("rowSize", rowSize);
-		request.setAttribute("fileRealName", fileRealName);
+		request.setAttribute("col", col);
+		request.setAttribute("word", word);
 	--%>
 	*세션 : ${authUser} <br/>
-	*pageNo : ${pageNo} <br/>
-	*rowSize : ${rowSize} <br/>
+	*pageNo(보고싶은페이지) : ${pageNo} <br/>
+	*rowSize(한페이지당 글 개수) : ${rowSize}  <br/>
+	*col(조회조건) : ${col}  <br/>
+	*word(조회한 단어) : ${word}  <br/>
+	*starPage : ${boardPage.startPage} <br/>
+	*endPage :  ${boardPage.endPage} <br/>
+	*totalPages : ${boardPage.totalPages} <br/><br/>
 	
 	<form name="frm" method="post" action="<%=request.getContextPath()%>/recomboard/listboard.do">	
 		<select name="col">
@@ -46,10 +52,12 @@
 			<option value="searchTitleContent">제목+내용</option>
 			<option value="none">아이디+제목+내용</option>
 		</select>
-		<input type="text" name="word" value="" placeholder="특수문자는 사용할수 없습니다.">
-		<button type="submit">검색</button>    
+		
+		<input type="text" name="word" value="" placeholder="특수문자는 사용 불가능">
+		<button type="submit">검색</button>   	 
 	</form>
 	
+	<br/><br/>
 	
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 	<h2>추천게시판 목록페이지</h2>

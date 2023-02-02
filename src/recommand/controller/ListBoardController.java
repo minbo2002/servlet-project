@@ -1,18 +1,9 @@
 package recommand.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-
-import member.model.User;
 import mvc.command.CommandHandler;
 import recommand.model.BoardPage;
-import recommand.model.WriteRequest;
 import recommand.service.ListBoardService;
 
 public class ListBoardController implements CommandHandler {
@@ -100,10 +91,14 @@ public class ListBoardController implements CommandHandler {
 		// 2. 비지니스로직 <-> Service <-> DAO <-> DB
 		BoardPage boardPage = listBoardService.getBoardPageSearch(pageNo, rowSize, col, word);
 		
+		System.out.println("ListBoardController 클래스에서 getBoardPageSearch() 메서드에 의해 반환된 boardPage ="+boardPage);
+		
 		// 3. Model
 		request.setAttribute("boardPage", boardPage);
 		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("rowSize", rowSize);
+		request.setAttribute("col", col);
+		request.setAttribute("word", word);
 		
 		// 4. View
 		return FORM_VIEW;

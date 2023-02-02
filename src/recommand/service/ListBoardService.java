@@ -32,18 +32,15 @@ public class ListBoardService {
 		
 		try {
 			Connection conn = ConnectionProvider.getConnection();
-			
 			System.out.println("conn="+conn);
 			
 			int total = recomBoardDAO.selectCount(conn);
 			
 			System.out.println("total="+total);
-			
 			System.out.println("pageNo="+pageNo+", rowSize="+rowSize+", col="+col+", word="+word);
 			
 			List<RecomBoard> boardList = recomBoardDAO.selectAllSearch(conn, (pageNo-1)*rowSize, rowSize, col, word);
-			
-			System.out.println("boardList="+boardList);
+			System.out.println("ListBoardService 클래스에서 selectAllSearch() 메서드에 의해 반환된 boardList ="+boardList);
 			
 			return new BoardPage(total, pageNo, rowSize, boardList);
 			

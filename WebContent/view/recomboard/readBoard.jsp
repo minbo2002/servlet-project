@@ -72,7 +72,7 @@
 
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 
-	<h2>readBoard.jsp</h2>
+	<h2>readBoard.jsp (상세보기 게시판)</h2>
     <hr/>
     <table border="1" style="margin: auto;">
     	<tr>

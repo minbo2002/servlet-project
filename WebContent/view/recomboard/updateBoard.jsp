@@ -55,7 +55,7 @@
 	
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 
-	<h2>updateBoard.jsp</h2>
+	<h2>updateBoard.jsp (수정게시판)</h2>
     <hr/>
     
     <form name="updateFrm" id="updateFrm" method="post" action="<%=request.getContextPath()%>/recomboard/update.do" enctype="multipart/form-data">

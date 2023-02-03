@@ -65,28 +65,14 @@
 		</select> <br/>	
 		
 		<input type="text" name="word" value="" placeholder="특수문자는 사용 불가능">
-		<button type="submit">검색</button>   	 
+		<button type="submit">검색</button>    
 	</form>
 
 	<br/><br/>
 	
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
-	<h2>listBoard.jsp (목록게시판)</h2>
-    
-    <!--  
-    <p>
-    <form name="rowSizeFrm" id="rowSizeFrm" action="<%=request.getContextPath()%>/recomboard/listboard.do" method="get">
-        게시물수 :
-		<select name="rowSize" id="rowSize">
-			<option value="3">선택</option>
-			<option value="3">3</option>
-			<option value="5">5</option>
-			<option value="10">10</option>
-		</select>
-    </form>
-    </p>
-    -->
-    
+	<h2>searchListBoard.jsp (검색이후의 목록게시판)</h2>
+
     <c:if test="${not empty authUser}">
     <p> 
    		<a href="/recomboard/write.do?rowSize=${rowSize}">글쓰기</a>
@@ -135,17 +121,17 @@
 	    		<td colspan="6" style="text-align: center;">
 	    			<%-- JSTL if조건문 : 이전출력 --%>
 	    			<c:if test="${boardPage.startPage > 5}">
-	    				<a href="/recomboard/listboard.do?pageNo=${boardPage.startPage-5}&rowSize=${rowSize}">prev</a>
+	    				<a href="/recomboard/search.do?pageNo=${boardPage.startPage-5}&rowSize=${rowSize}&word=${word}&col=${col}">prev</a>
 	    			</c:if>
 	    			
 	    			<%-- JSTL forEach조건문 : 페이지번호출력 --%>
 	    			<c:forEach var="pNo" begin="${boardPage.startPage}" end="${boardPage.endPage}">
-	    				<a href="/recomboard/listboard.do?pageNo=${pNo}&rowSize=${rowSize}">${pNo}</a>
+	    				<a href="/recomboard/search.do?pageNo=${pNo}&rowSize=${rowSize}&word=${word}&col=${col}">${pNo}</a>
 	    			</c:forEach>
 	    			
 	    			<%-- JSTL if조건문 : 다음출력 --%>
 	    			<c:if test="${boardPage.endPage < boardPage.totalPages}">
-	    				<a href="/recomboard/listboard.do?pageNo=${boardPage.startPage+5}&rowSize=${rowSize}">next</a>
+	    				<a href="/recomboard/search.do?pageNo=${boardPage.startPage+5}&rowSize=${rowSize}&word=${word}&col=${col}">next</a>
 	    			</c:if>
 	    		</td>
 	    	</tr>

@@ -39,7 +39,7 @@
 
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 
-	<h2>writeBookForm.jsp</h2>
+	<h2>writeBookForm.jsp (글쓰기 게시판)</h2>
     <hr/>
     
 	<form name="writeFrm" id="writeFrm" method="post" action="<%=request.getContextPath()%>/recomboard/write.do" enctype="multipart/form-data">

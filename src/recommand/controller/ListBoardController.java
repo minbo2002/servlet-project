@@ -15,10 +15,10 @@ public class ListBoardController implements CommandHandler {
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		if(request.getMethod().equalsIgnoreCase("GET")) {
-			return processForm(request, response);  // 책정보 등록으로 이동
+			return processForm(request, response);
 			
 		}else if(request.getMethod().equalsIgnoreCase("POST")) {
-			return processSubmit(request, response);  // 책정보 등록 데이터 처리
+			return processSubmit(request, response);  
 		
 		}else {
 
@@ -65,42 +65,6 @@ public class ListBoardController implements CommandHandler {
 
 		System.out.println("ListBoardController클래스의 POST방식");
 
-		// 1. 파라미터받기
-		String col = request.getParameter("col");
-		String word = request.getParameter("word");
-
-		System.out.println("검색할 범위="+col);
-		System.out.println("검색할 단어="+word);
-
-		// pageNo : 보고싶은 페이지 	 
-		String strPageNo = request.getParameter("pageNo");
-		int pageNo = 1;
-		if(strPageNo!=null) {
-			pageNo = Integer.parseInt(strPageNo);
-		}
-		
-		// rowSize: 한페이지당 보여줄 글 개수
-		String strRowSize = request.getParameter("rowSize");
-		int rowSize = 1;
-		if(strRowSize==null) {
-			rowSize = 10;
-		}else {
-			rowSize = Integer.parseInt(strRowSize);;
-		}
-
-		// 2. 비지니스로직 <-> Service <-> DAO <-> DB
-		BoardPage boardPage = listBoardService.getBoardPageSearch(pageNo, rowSize, col, word);
-		
-		System.out.println("ListBoardController 클래스에서 getBoardPageSearch() 메서드에 의해 반환된 boardPage ="+boardPage);
-		
-		// 3. Model
-		request.setAttribute("boardPage", boardPage);
-		request.setAttribute("pageNo", pageNo);
-		request.setAttribute("rowSize", rowSize);
-		request.setAttribute("col", col);
-		request.setAttribute("word", word);
-		
-		// 4. View
-		return FORM_VIEW;
+		return null;
 	}
 }

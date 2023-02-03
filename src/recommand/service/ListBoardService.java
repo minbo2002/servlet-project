@@ -30,19 +30,17 @@ public class ListBoardService {
 	
 	public BoardPage getBoardPageSearch(int pageNo, int rowSize, String col, String word) {
 		
+		System.out.println("ListBoardService클래스의  getBoardPageSearch()메서드 진입");
+		
 		try {
 			Connection conn = ConnectionProvider.getConnection();
-			System.out.println("conn="+conn);
+
+			int afterTotal = recomBoardDAO.selectSearchCount(conn, col, word); 
+			System.out.println("afterTotal="+afterTotal);
 			
-			int total = recomBoardDAO.selectCount(conn);
+			List<RecomBoard> afterBoardList = recomBoardDAO.selectAllSearch(conn, (pageNo-1)*rowSize, rowSize, col, word);
 			
-			System.out.println("total="+total);
-			System.out.println("pageNo="+pageNo+", rowSize="+rowSize+", col="+col+", word="+word);
-			
-			List<RecomBoard> boardList = recomBoardDAO.selectAllSearch(conn, (pageNo-1)*rowSize, rowSize, col, word);
-			System.out.println("ListBoardService 클래스에서 selectAllSearch() 메서드에 의해 반환된 boardList ="+boardList);
-			
-			return new BoardPage(total, pageNo, rowSize, boardList);
+			return new BoardPage(afterTotal, pageNo, rowSize, afterBoardList);
 			
 		} catch (SQLException e) {
 			throw new RuntimeException();

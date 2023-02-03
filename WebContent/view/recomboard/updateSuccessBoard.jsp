@@ -55,7 +55,7 @@
 
 	<a href="<%=request.getContextPath()%>/index.jsp">HOME</a>
 
-	<h2>readBoard.jsp</h2>
+	<h2>updateSuccessBoard.jsp (수정 성공후 게시판)</h2>
     <hr/>
     
     <table border="1" style="margin: auto;">

@@ -51,21 +51,42 @@ public class UpdateBoardService {
 								  updateReq.getrNo(),
 								  updateReq.getUser().getM_no()
 								);
-			
-			// DB에 있는 이미지 파일데이터 가져오기
-			RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
-			
-			// 기존의 이미지 파일데이터 삭제
-			fileDAO.delete(conn, oldFile.getR_no());
 
-			// 새롭게 선택한 이미지파일 업데이트
-			fileDAO.insertForUpdate(
-					conn,
-					updateReq.getRecomFile().getFilename(), 
-					updateReq.getRecomFile().getFileRealName(),
-					updateReq.getUser().getM_no(),
-					updateReq.getrNo()
-				   );
+			// 게시판 내부의 파일여부 확인
+			int selectCount = fileDAO.selectCount(conn, updateReq.getrNo());
+			System.out.println("게시판 내부의 파일 개수 = "+selectCount);
+			
+			if(selectCount!=0) {
+				System.out.println("게시판에 이미지 파일 존재");
+				
+				// DB에 있는 이미지 파일데이터 가져오기
+				RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
+				
+				//~~~~~~~~~~~~ 애초에 저장된 이미지가 없을경우  수정할때 이미지를 넣을때 조건문처리하기
+				
+				// 기존의 이미지 파일데이터 삭제
+				fileDAO.delete(conn, oldFile.getR_no());
+				
+				
+				// 새롭게 선택한 이미지파일 업데이트
+				fileDAO.insertForUpdate(
+						conn,
+						updateReq.getRecomFile().getFilename(), 
+						updateReq.getRecomFile().getFileRealName(),
+						updateReq.getUser().getM_no(),
+						updateReq.getrNo()
+						);
+			}else {
+				System.out.println("게시판에 이미지 파일 없음");
+				
+				fileDAO.insertForUpdate(
+						conn,
+						updateReq.getRecomFile().getFilename(), 
+						updateReq.getRecomFile().getFileRealName(),
+						updateReq.getUser().getM_no(),
+						updateReq.getrNo()
+						);
+			}
 
 			conn.commit();
 			

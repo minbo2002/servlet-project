@@ -98,7 +98,7 @@
     	<tr>
     		<th>책 이미지</th>
     		<td align="center" valign="middle">
-    			<img src="../uploadImage/${boardData.recomFile.fileRealName}" style="height:300px; width:600px;">
+    			<img src="../uploadImage/${boardData.recomFile.fileRealName}" style="height:300px; width:600px;" alt="이미지를 등록하세요">
     		</td>
     	</tr>
     	<tr>

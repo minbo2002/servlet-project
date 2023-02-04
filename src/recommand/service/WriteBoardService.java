@@ -19,7 +19,7 @@ public class WriteBoardService {
 	
 	Connection conn = null;
 	
-	public Integer writeBoard(WriteRequest writeReq) {
+	public int writeBoard(WriteRequest writeReq) {
 		
 		try {
 			conn = ConnectionProvider.getConnection();
@@ -40,20 +40,27 @@ public class WriteBoardService {
 			// 게시판DB에 저장
 			RecomBoard savedRecomBoard = recomBoardDAO.insert(conn, recomBoard);
 
+			System.out.println("savedRecomBoard="+savedRecomBoard);
+			
 			if(savedRecomBoard == null) {
 				throw new RuntimeException("추천게시판 등록 실패");
 			}
 			
-			// 입력한 이미지 파일 데이터를 갖는 파일객체 생성
-			RecomFile recomFile = new RecomFile( 
-												 writeReq.getRecomfile().getFilename(), 
-												 writeReq.getRecomfile().getFileRealName(), 
-												 savedRecomBoard.getmNo(), 
-												 savedRecomBoard.getrNo()
-											   );
-			// 파일DB에 저장
-			fileDAO.insert(conn, recomFile, savedRecomBoard);
-			
+			// 저장할 이미지의 이름이 있다면
+			if(writeReq.getRecomfile().getFilename()!=null) {
+				
+				// 입력한 이미지 파일 데이터를 갖는 파일객체 생성
+				RecomFile recomFile = new RecomFile( 
+						writeReq.getRecomfile().getFilename(), 
+						writeReq.getRecomfile().getFileRealName(), 
+						savedRecomBoard.getmNo(), 
+						savedRecomBoard.getrNo()
+						);
+				
+				// 파일DB에 저장
+				fileDAO.insert(conn, recomFile, savedRecomBoard);
+			}
+
 			conn.commit();
 
 			return savedRecomBoard.getrNo();

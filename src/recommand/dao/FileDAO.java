@@ -27,7 +27,7 @@ public class FileDAO {
 			pstmt.setInt(4, savedRecomBoard.getrNo());
 			
 			int cnt = pstmt.executeUpdate();
-			System.out.println("생성된 test_board테이블의 행 개수 = " + cnt);
+			System.out.println("저장된 파일의 행 개수 = " + cnt);
 	
 			return recomFile;
 
@@ -68,6 +68,30 @@ public class FileDAO {
 		}
 	}
 	
+	public int selectCount(Connection conn, int no) throws SQLException {
+		System.out.println("FileDAO 클래스의 selectCount() 메서드 실행");
+		
+		String sql = "SELECT COUNT(b.FILE_NAME) cntFile " + 
+					 "FROM recomboard a, recomfile b " + 
+					 "WHERE a.R_NO=b.R_NO " + 
+					 "AND a.R_NO=?";
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+			return 0;
+			
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+	}
+	
 	// 기존게시판의  게시판데이터 및 파일 데이터를 변경할때 필요한 메서드
 	public void insertForUpdate(Connection conn, String filename, String fileRealName, int mNo, int rNo) throws SQLException {
 		System.out.println("FileDAO 클래스의 update() 메서드 진입");
@@ -91,6 +115,7 @@ public class FileDAO {
 	}
 	
 	public int delete(Connection conn, int no) {
+		System.out.println("FileDAO 클래스의 delete() 메서드 진입");
 		
 		String sql = "DELETE from recomfile " + 
 					 "WHERE r_no=?";

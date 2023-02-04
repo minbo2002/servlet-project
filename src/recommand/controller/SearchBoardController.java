@@ -35,15 +35,6 @@ public class SearchBoardController implements CommandHandler{
 			pageNo = Integer.parseInt(strPageNo);
 		}
 		
-		// rowSize: 한페이지당 보여줄 글 개수
-//		String strRowSize = request.getParameter("rowSize");
-//		int rowSize = 10;
-//		if(strRowSize==null) {
-//			rowSize = 10;
-//		}else {
-//			rowSize = Integer.parseInt(strRowSize);;
-//		}
-		
 		int rowSize = Integer.parseInt(request.getParameter("rowSize"));
 		if(rowSize==0) {
 			rowSize = 10;

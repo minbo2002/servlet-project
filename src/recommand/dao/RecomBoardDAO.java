@@ -194,7 +194,7 @@ public class RecomBoardDAO {
 			pstmt.setInt(8, recomBoard.getmNo()); 
 			
 			int cnt = pstmt.executeUpdate();
-			System.out.println("insert결과 행 개수 ="+cnt);
+			System.out.println("게시판에 저장된  행개수 ="+cnt);
 			
 			if(cnt>0) {  // 입력이 되었다면
 				stmt = conn.createStatement();
@@ -367,7 +367,7 @@ public class RecomBoardDAO {
 		try {
 			if(col.equals("all")) {  // 아이디, 게시판 제목, 게시판 내용
 			
-			System.out.println("col이 all일경우");
+				System.out.println("col이 all일경우");
 				
 				sql = "SELECT COUNT(*) cnt " + 
 						  "FROM recomboard a, member b " + 
@@ -389,7 +389,7 @@ public class RecomBoardDAO {
 				
 			}else if(col.equals("searchId")) {  // 아이디
 	
-			 System.out.println("col이 all일경우");	
+				System.out.println("col이 searchId일경우");	
 			 
 				sql = "SELECT COUNT(*) cnt " + 
 					  "FROM recomboard a, member b " + 
@@ -405,6 +405,8 @@ public class RecomBoardDAO {
 				return 0;
 						
 			}else if(col.equals("searchTitle")) {  // 게시판 제목
+			
+				System.out.println("col이 searchTitle일경우");		
 				
 				sql = "SELECT COUNT(*) cnt " + 
 					  "FROM recomboard a, member b " + 
@@ -421,6 +423,8 @@ public class RecomBoardDAO {
 				
 			}else if(col.equals("searchContent")) {   // 게시판 내용
 				
+				System.out.println("col이 searchContent일경우");	
+				
 				sql = "SELECT COUNT(*) cnt " + 
 					  "FROM recomboard a, member b " + 
 					  "WHERE a.M_NO=b.M_NO and a.R_CONTENT LIKE CONCAT('%',CONCAT(?,'%'))";
@@ -435,6 +439,8 @@ public class RecomBoardDAO {
 				return 0;
 			
 			}else if(col.equals("searchTitleContent")) {  // 게시판 제목, 게시판 내용
+				
+				System.out.println("col이 searchTitleContent일경우");
 				
 				sql = "SELECT COUNT(*) cnt " + 
 					  "FROM recomboard a, member b " + 
@@ -452,6 +458,8 @@ public class RecomBoardDAO {
 				return 0;
 			
 			}else {  // 조회조건없음 (전체목록)
+				
+				System.out.println("조회조건 없을경우 (전체목록)");
 				
 				sql = "SELECT COUNT(*) cnt " + 
 					  "FROM recomboard a, member b " + 

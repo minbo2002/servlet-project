@@ -61,13 +61,10 @@ public class UpdateBoardService {
 				
 				// DB에 있는 이미지 파일데이터 가져오기
 				RecomFile oldFile = fileDAO.selectById(conn, updateReq.getrNo());
-				
-				//~~~~~~~~~~~~ 애초에 저장된 이미지가 없을경우  수정할때 이미지를 넣을때 조건문처리하기
-				
+
 				// 기존의 이미지 파일데이터 삭제
 				fileDAO.delete(conn, oldFile.getR_no());
-				
-				
+
 				// 새롭게 선택한 이미지파일 업데이트
 				fileDAO.insertForUpdate(
 						conn,

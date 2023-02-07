@@ -102,7 +102,7 @@ public class WriteBoardController implements CommandHandler {
 		
 		// 2. 비지니스 로직 수행 <-> Serivce <-> DAO <-> DB
 		int cnt = writeBoardService.writeBoard(writeReq);
-		System.out.println("생성된 게시판 rNo(PK) 값 = "+cnt);
+		System.out.println("생성된 게시판 rNo(PK) = "+cnt);
 		
 		// 3. Model
 		request.setAttribute("boardPage", boardPage);
